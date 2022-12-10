@@ -1,0 +1,19 @@
+{
+    "name": "WhiteUI.Editor",
+    "rootNamespace": "WUI.Editor",
+    "references": [
+        "GUID:a455dfd292d1ebd42b27e2a04c233688",
+        "GUID:123595415c065f142a080b97aa5a89bf"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

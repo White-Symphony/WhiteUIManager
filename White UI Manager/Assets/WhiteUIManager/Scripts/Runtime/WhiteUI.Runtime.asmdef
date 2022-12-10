@@ -1,0 +1,16 @@
+{
+    "name": "WhiteUI.Runtime",
+    "rootNamespace": "WUI.Runtime",
+    "references": [
+        "GUID:a455dfd292d1ebd42b27e2a04c233688"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

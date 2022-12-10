@@ -1,0 +1,122 @@
+/* CONTAINERS */
+
+.wui-node__extension-container
+{
+    background-color: var(--wui-colors-window-background-1);
+    padding: 8px;
+}
+
+.wui-node__custom-data-container
+{
+    background-color: var(--wui-colors-window-background-1);
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.wui-node__main-container
+{
+    background-color: var(--wui-colors-window-background-1);
+}
+
+/* INPUTS */
+
+.wui-node__textfield > .unity-text-field__input
+{
+    background-color: var(--wui-colors-window-foreground-1);
+    border-color: var(--wui-colors-window-outline-1);
+    border-radius: 4px;
+    max-width: 260px;
+    min-width: 60px;
+    padding: 8px;
+}
+
+.wui-node__textfield_hidden > .unity-text-field__input
+{
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.wui-node__textfield_hidden > .unity-text-field__input:focus
+{
+    background-color: var(--wui-colors-window-background-1);
+    border-color: var(--wui-colors-window-outline-1);
+}
+
+.wui-node__filename-textfield > .unity-text-field__input
+{
+    max-width: 500px;
+}
+
+.wui-node__filename-textfield > .unity-text-field__input:focus
+{
+    margin: 4px;
+    padding: 4px;
+}
+
+.wui-node__quote-textfield > .unity-text-field_input
+{
+    background-color: transparent;
+    border-color: transparent;
+    border-left-color: var(--wui-colors-window-outline-1);
+    border-left-width: 4px;
+    padding: 16px;
+    max-width: 600px;
+}
+
+.wui-node__quote-textfield > .unity-text-field_input:hover
+{
+    background-color: var(--wui-colors-window-background-1);
+}
+
+.wui-node__quote-textfield > .unity-text-field_input:focus
+{
+    background-color: var(--wui-colors-window-background-1);
+    border-color: var(--wui-colors-window-outline-1);
+}
+
+/* BUTTONS */
+
+.wui-node__button
+{
+    background-color: var(--wui-colors-window-background-1);
+    border-radius: 8px;
+    border-color: var(--wui-colors-window-outline-1);
+}
+
+.wui-node__button:hover
+{
+    background-color: var(--wui-colors-window-foreground-1);
+    border-color: var(--wui-colors-window-outline-2);
+}
+
+.wui-node__button:active
+{
+    background-color: var(--wui-colors-window-outline-1);
+    border-color: var(--wui-colors-window-outline-3);
+}
+
+/* ELEMENTS */
+
+TextField
+{
+    margin-left: 0;
+}
+
+.wui-node__custom-data-container > foldout
+{
+    margin-left: -4px;
+    margin-top: 4px;
+}
+
+.wui-node__custom-data-container > foldout > TextField
+{
+    margin-left: -12px;
+    margin-top: 8px;
+}
+
+/* BUILT IN */
+
+.unity-toggle__text
+{
+    margin-left: 2px;
+}

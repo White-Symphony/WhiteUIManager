@@ -1,0 +1,76 @@
+/* VISUAL ELEMENTS*/
+
+Toolbar
+{
+    background-color: var(--wui-colors-window-background-1);
+    border-color: var(--wui-colors-window-outline-1);
+    height: 55px;
+    border-radius: 15px;
+}
+
+TextField
+{
+    padding: 4px;
+}
+
+/* BUTTONS */
+
+Button
+{
+    background-color: var(--wui-colors-window-background-1);
+    border-radius: 8px;
+    border-color: var(--wui-colors-window-outline-1);
+    max-height: 35px;
+    -unity-text-align: middle-center;
+    padding: 12px;
+    margin-top: 11px;
+}
+
+Button:hover
+{
+    background-color: var(--wui-colors-window-foreground-1);
+    border-color: var(--wui-colors-window-outline-2);
+}
+
+Button:active
+{
+    background-color: var(--wui-colors-window-outline-1);
+    border-color: var(--wui-colors-window-outline-3);
+}
+
+/* BUILT-IN */
+
+.unity-text-field__label
+{
+    padding: 4px;
+}
+
+TextField:focus > .unity-text-field__label
+{
+    color: var(--wui-colors-window-yellow-1);
+}
+
+.unity-text-field__input
+{
+    background-color: var(--wui-colors-window-foreground-1);
+    border-color: var(--wui-colors-window-outline-1);
+    border-radius: 4px;
+    max-height: 25px;
+    min-width: 120px;
+    padding-left: 6px;
+}
+
+.unity-text-field
+{
+    padding-top: 15px;
+}
+
+.unity-text-field__input:focus
+{
+    color: var(--wui-colors-window-yellow-1);
+}
+
+.wui-toolbar__button_selected
+{
+    color: var(--wui-colors-window-red-1);
+}

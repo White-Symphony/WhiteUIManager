@@ -1,0 +1,7 @@
+/* CONTAINERS */
+
+.wui-group__header-container
+{
+    background-color: var(--wui-colors-window-yellow-1);
+    border-color: var(--wui-colors-window-outline-1);
+}
