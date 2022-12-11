@@ -19,9 +19,7 @@ namespace WUI.Editor.Elements
         public string UIName { get; protected set; }
 
         public string UIInformation { get; protected set; }
-        
-        public WUI_NodeSaveData CurrentUI { get; set; }
-        
+
         public WUI_UISaveData PreviousUI { get; set; }
         
         public WUI_UISaveData NextUI { get; set; }
@@ -145,7 +143,10 @@ namespace WUI.Editor.Elements
 
             var infoFoldout = WUI_ElementUtility.CreateFoldout("UI Information");
 
-            var infoTextField = WUI_ElementUtility.CreateTextArea(UIInformation);
+            var infoTextField = WUI_ElementUtility.CreateTextArea(UIInformation, onValueChanged: e =>
+            {
+                UIInformation = e.newValue;
+            });
 
             infoTextField.AddClasses(
                 "wui-node__textfield",

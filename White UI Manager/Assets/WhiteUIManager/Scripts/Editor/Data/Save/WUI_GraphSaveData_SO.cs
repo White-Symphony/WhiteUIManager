@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
@@ -11,7 +10,7 @@ namespace WUI.Editor.Data.Save
     [CreateAssetMenu(menuName = "WhiteUI/UI Graph", fileName = "new UI Graph", order = 2)]
     public class WUI_GraphSaveData_SO : ScriptableObject
     {
-        [field:SerializeField] public string FileName { get; set; }
+        public string FileName { get; set; }
         
         public List<WUI_GroupSaveData> Groups { get; set; }
         
@@ -23,11 +22,19 @@ namespace WUI.Editor.Data.Save
         
         public WUI_SerializableDictionary<string, List<string>> OldGroupedNames { get; set; }
 
-        private void Awake() => EditorApplication.projectChanged += SetFileName;
+        private void Awake() => EditorApplication.projectChanged +=  SetFileName;
 
         private void OnDestroy() => EditorApplication.projectChanged -= SetFileName;
-        
-        private void SetFileName() => FileName = name;
+
+        private void SetFileName()
+        {
+            if (!AssetDatabase.Contains(this))
+            {
+                EditorApplication.projectChanged -= SetFileName;
+                return;
+            }
+            FileName = name;
+        }
 
         public void Initialize(string fileName)
         {
@@ -38,7 +45,7 @@ namespace WUI.Editor.Data.Save
         }
 
         [OnOpenAsset]
-        public static bool OnOpenAsset(int instanceID, int line)
+        public static bool OnOpenAsset(int instanceID, int line) 
         {
             var project = EditorUtility.InstanceIDToObject(instanceID) as WUI_GraphSaveData_SO;
             if (project == null) return false;

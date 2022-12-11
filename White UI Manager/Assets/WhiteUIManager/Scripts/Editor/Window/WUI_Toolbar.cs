@@ -33,6 +33,9 @@ namespace WUI.Editor.Window
             _toolbar = new Toolbar();
 
             _saveButton = WUI_ElementUtility.CreateButton("Save", Save);
+            
+            _saveButton.SetEnabled(false);
+            
             var clearButton = WUI_ElementUtility.CreateButton("Clear", Clear);
             var resetButton = WUI_ElementUtility.CreateButton("Reset", ResetGraph);
             _miniMapButton = WUI_ElementUtility.CreateButton("Mini Map", ToggleMiniMap);

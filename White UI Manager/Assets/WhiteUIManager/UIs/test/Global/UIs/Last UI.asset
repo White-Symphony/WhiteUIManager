@@ -10,15 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edf67d31e3e3dff4c8b339525016b272, type: 3}
-  m_Name: b
+  m_Name: Last UI
   m_EditorClassIdentifier: 
-  <UIName>k__BackingField: b
-  <UIInformation>k__BackingField: 
-  <PreviousUI>k__BackingField:
-    <Text>k__BackingField: 
-    <NodeID>k__BackingField: 
-  <NextUI>k__BackingField:
-    <Text>k__BackingField: MiddleUI
-    <NodeID>k__BackingField: 5323b182-1780-4b2a-9e8e-45ee4c6113b4
-  <UIType>k__BackingField: 0
-  <IsStartingNode>k__BackingField: 1

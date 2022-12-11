@@ -16,5 +16,6 @@ MonoBehaviour:
   <UIGroups>k__BackingField:
     list: []
   <UngroupedUIs>k__BackingField:
+  - {fileID: 11400000, guid: c3223c25d3534ac40a31702c59206f3b, type: 2}
   - {fileID: 11400000, guid: a4caa79d06f620a49a99264ad2438c57, type: 2}
-  - {fileID: 11400000, guid: 6421ac1cd48c7484291dcf7dbb39bce5, type: 2}
+  - {fileID: 11400000, guid: 25f1988eedff44d4dbbc8a7b689cb601, type: 2}

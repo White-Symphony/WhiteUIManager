@@ -67,9 +67,11 @@ namespace WUI.Editor.Graph
                 if (selection[0] is not WUI_Node node) return;
 
                 var uiSO = ScriptableObject.CreateInstance<WUI_UI_SO>();
+                
                 uiSO.NextUI = node.NextUI;
                 uiSO.PreviousUI = node.PreviousUI;
                 uiSO.UIName = node.UIName;
+                uiSO.UIInformation = node.UIInformation;
                 uiSO.UIType = node.UIType;
 
                 Selection.activeObject = uiSO;
