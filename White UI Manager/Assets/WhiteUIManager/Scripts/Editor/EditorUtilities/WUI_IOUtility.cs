@@ -121,7 +121,7 @@ namespace WUI.Editor.Utilities
         {
             foreach (var nodeData in nodes)
             {
-                if(_graphView.CreateNode(nodeData.Name, nodeData.UIType, nodeData.Position, false) is not WUI_Node node) continue;
+                if(_graphView.CreateNode(nodeData.Name, nodeData.NodeType, nodeData.Position, false) is not WUI_Node node) continue;
 
                 node.ID = nodeData.ID;
                 node.NextUI = nodeData.NextUI;
@@ -301,7 +301,7 @@ namespace WUI.Editor.Utilities
                 node.UIInformation,
                 node.PreviousUI,
                 node.NextUI,
-                node.UIType,
+                node.NodeType,
                 node.IsStartingNode());
             
             _createUIs.Add(node.ID, ui);
@@ -318,7 +318,7 @@ namespace WUI.Editor.Utilities
                 PreviousUI = node.PreviousUI,
                 NextUI = node.NextUI,
                 GroupID = node.Group?.ID,
-                UIType = node.UIType,
+                NodeType = node.NodeType,
                 Position = node.GetPosition().position
             };
             

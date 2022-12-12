@@ -2,7 +2,7 @@
 
 Toolbar
 {
-    background-color: var(--wui-colors-window-background-1);
+    background-color: var(--wui-colors-window-background-3);
     border-color: var(--wui-colors-window-outline-1);
     height: 55px;
     border-radius: 15px;
@@ -17,7 +17,7 @@ TextField
 
 Button
 {
-    background-color: var(--wui-colors-window-background-1);
+    background-color: var(--wui-colors-window-background-3);
     border-radius: 8px;
     border-color: var(--wui-colors-window-outline-1);
     max-height: 35px;

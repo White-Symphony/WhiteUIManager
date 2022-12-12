@@ -5,6 +5,10 @@
     --wui-colors-grid-light-grey-3: rgba(51, 51, 51, 1);
     
     --wui-colors-window-background-1: #040F16;
+    --wui-colors-window-background-2: #151616;
+    --wui-colors-window-background-3: #0C0F12;
+    
+    --wui-colors-window-upground-1: #151616;
     
     --wui-colors-window-foreground-1: #5E747F;
     
@@ -14,7 +18,7 @@
     
     --wui-colors-window-red-1: #FF595E;
     
-    --wui-metrics-grid-25: 25;
+    --wui-metrics-grid-25: 50;
     --wui-metrics-grid-50: 50;
     --wui-metrics-grid-75: 75;
 }

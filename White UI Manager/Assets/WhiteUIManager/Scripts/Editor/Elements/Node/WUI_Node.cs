@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -24,15 +25,17 @@ namespace WUI.Editor.Elements
         
         public WUI_UISaveData NextUI { get; set; }
         
-        public WUI_UIType UIType { get; protected set; }
+        public WUI_NodeType NodeType { get; protected set; }
         
         public WUI_Group Group { get; set; }
 
         protected WUI_GraphView _graphView;
+
+        protected Image _icon;
         
         private Color _defaultBackgroundColor;
 
-        public virtual void Initialize(string nodeName, WUI_GraphView graphView, WUI_UIType uiType, Vector2 position)
+        public virtual void Initialize(string nodeName, WUI_GraphView graphView, WUI_NodeType nodeType, Vector2 position)
         {
             ID = Guid.NewGuid().ToString();
             
@@ -41,7 +44,7 @@ namespace WUI.Editor.Elements
             PreviousUI = new WUI_UISaveData();
             NextUI = new WUI_UISaveData();
             
-            UIType = uiType;
+            NodeType = nodeType;
             UIName = nodeName;
 
             _defaultBackgroundColor = new Color(29f / 255f, 29f / 255f, 30f / 255f, .3f);
@@ -65,6 +68,8 @@ namespace WUI.Editor.Elements
         {
             #region TITLE
 
+            SetIcon();
+            
             var titleTextField = WUI_ElementUtility.CreateTextField(UIName, null, callback =>
             {
                 if (callback.target is not TextField textField) return;
@@ -113,15 +118,36 @@ namespace WUI.Editor.Elements
                 "wui-node__textfield",
                 "wui-node__filename-textfield",
                 "wui-node__textfield_hidden");
+            
+            titleContainer.Insert(1, titleTextField);
 
-            titleContainer.Insert(0, titleTextField);
+            #endregion
+
+            #region Input Container
+
+            inputContainer.style.borderBottomWidth = 5;
+            inputContainer.style.borderTopWidth = 5;
+            inputContainer.style.borderRightWidth = 5;
+            inputContainer.style.borderLeftWidth = 5;
+            
+            outputContainer.style.borderBottomWidth = 5;
+            outputContainer.style.borderTopWidth = 5;
+            outputContainer.style.borderRightWidth = 5;
+            outputContainer.style.borderLeftWidth = 5;
 
             #endregion
 
             RefreshExpandedState();
         }
 
-        protected void AddOpenButton()
+        protected virtual void SetIcon()
+        {
+            titleContainer.Insert(0, _icon);
+            
+            RefreshExpandedState();
+        }
+        
+        protected virtual void AddOpenButton()
         {
             var openButton = WUI_ElementUtility.CreateButton("Open This UI");
 
@@ -135,7 +161,7 @@ namespace WUI.Editor.Elements
             RefreshExpandedState();
         }
         
-        protected void AddUIInfo()
+        protected virtual void AddUIInfo()
         {
             var customDataContainer = new VisualElement();
 
@@ -166,7 +192,7 @@ namespace WUI.Editor.Elements
             this.CreatePort(
                 out var port,
                 inputName,
-                new Color(1f, 0.61f, 0.23f),
+                new Color(1f, 0.79f, 0.23f),
                 Orientation.Horizontal,
                 Direction.Input,
                 capacity,
@@ -184,7 +210,7 @@ namespace WUI.Editor.Elements
             this.CreatePort(
                 out var port,
                 inputName,
-                new Color(0.58f, 1f, 0.25f),
+                new Color(0.33f, 0.87f, 0.99f),
                 Orientation.Horizontal,
                 Direction.Output,
                 capacity,

@@ -18,7 +18,7 @@ namespace WUI.Editor.Data.Save
         
         [field:SerializeField] public WUI_UISaveData NextUI { get; set; }
 
-        [field:SerializeField] public WUI_UIType UIType { get; set; }
+        [field:SerializeField] public WUI_NodeType NodeType { get; set; }
         
         [field:SerializeField] public Vector2 Position { get; set; }
     }

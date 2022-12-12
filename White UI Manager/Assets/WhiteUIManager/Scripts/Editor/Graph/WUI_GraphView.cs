@@ -72,7 +72,7 @@ namespace WUI.Editor.Graph
                 uiSO.PreviousUI = node.PreviousUI;
                 uiSO.UIName = node.UIName;
                 uiSO.UIInformation = node.UIInformation;
-                uiSO.UIType = node.UIType;
+                uiSO.NodeType = node.NodeType;
 
                 Selection.activeObject = uiSO;
 
@@ -161,9 +161,9 @@ namespace WUI.Editor.Graph
         {
             #region Menu Manipulators
 
-            _manipulator.AddManipulator(this, CreateNodeContextualMenu("Add First UI", WUI_UIType.FirstUI));
-            _manipulator.AddManipulator(this, CreateNodeContextualMenu("Add Middle UI", WUI_UIType.MiddleUI));
-            _manipulator.AddManipulator(this, CreateNodeContextualMenu("Add Last UI", WUI_UIType.LastUI));
+            _manipulator.AddManipulator(this, CreateNodeContextualMenu("Add First UI", WUI_NodeType.HomeUI));
+            _manipulator.AddManipulator(this, CreateNodeContextualMenu("Add Middle UI", WUI_NodeType.BasicUI));
+            _manipulator.AddManipulator(this, CreateNodeContextualMenu("Add Last UI", WUI_NodeType.LastUI));
             
             _manipulator.AddManipulator(this, CreateGroupContextualMenu());
 
@@ -172,10 +172,10 @@ namespace WUI.Editor.Graph
             _manipulator.SetManipulator(this);
         }
 
-        private IManipulator CreateNodeContextualMenu(string actionTitle, WUI_UIType uiType)
+        private IManipulator CreateNodeContextualMenu(string actionTitle, WUI_NodeType nodeType)
         {
             var contextualMenuManipulator = new ContextualMenuManipulator(
-                menuEvent => menuEvent.menu.AppendAction(actionTitle, actionEvent => AddElement(CreateNode(uiType.ToString(), uiType, GetLocalMousePosition(actionEvent.eventInfo.localMousePosition)))));
+                menuEvent => menuEvent.menu.AppendAction(actionTitle, actionEvent => AddElement(CreateNode(nodeType.ToString(), nodeType, GetLocalMousePosition(actionEvent.eventInfo.localMousePosition)))));
 
             return contextualMenuManipulator;
         }
@@ -214,15 +214,15 @@ namespace WUI.Editor.Graph
             return group;
         }
 
-        public Node CreateNode(string nodeName, WUI_UIType uiType, Vector2 position, bool shouldDraw = true)
+        public Node CreateNode(string nodeName, WUI_NodeType nodeType, Vector2 position, bool shouldDraw = true)
         {
-            var nodeType = Type.GetType($"WUI.Editor.Elements.WUI_{uiType}_Node");
+            var type = Type.GetType($"WUI.Editor.Elements.WUI_{nodeType}_Node");
 
-            if (nodeType == null) return default;
+            if (type == null) return default;
 
-            if (Activator.CreateInstance(nodeType) is not WUI_Node node) return default;
+            if (Activator.CreateInstance(type) is not WUI_Node node) return default;
 
-            node.Initialize(nodeName, this, uiType, position);
+            node.Initialize(nodeName, this, nodeType, position);
             
             if(shouldDraw) node.Draw();
 

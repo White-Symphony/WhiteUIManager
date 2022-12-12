@@ -1,7 +1,7 @@
 GridBackground
 {
-    --grid-background-color: var(--ds-colors-grid-light-grey-1);
-    --line-color: var(--ds-colors-grid-light-grey-2);
-    --thick-line-color: var(--ds-colors-grid-light-grey-3);
+    --grid-background-color: #1f1f1f;
+    --line-color: #1c1c1c;
+    --thick-line-color: #191919;
     --spacing: var(--wui-metrics-grid-25);
 }

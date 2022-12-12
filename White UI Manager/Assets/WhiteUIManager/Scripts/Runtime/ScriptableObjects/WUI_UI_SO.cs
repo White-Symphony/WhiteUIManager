@@ -14,11 +14,11 @@ namespace WUI.Runtime.ScriptableObjects
         
         public WUI_UISaveData NextUI { get; set; }
         
-        public WUI_UIType UIType { get; set; }
+        public WUI_NodeType NodeType { get; set; }
         
         public bool IsStartingNode { get; set; }
 
-        public void Initialize(string uiName, string uiInformation, WUI_UISaveData previousUI, WUI_UISaveData nextUI, WUI_UIType uiType, bool isStartingNode)
+        public void Initialize(string uiName, string uiInformation, WUI_UISaveData previousUI, WUI_UISaveData nextUI, WUI_NodeType nodeType, bool isStartingNode)
         {
             UIName = uiName;
             
@@ -28,7 +28,7 @@ namespace WUI.Runtime.ScriptableObjects
             
             NextUI = nextUI;
             
-            UIType = uiType;
+            NodeType = nodeType;
 
             IsStartingNode = isStartingNode;
         }
