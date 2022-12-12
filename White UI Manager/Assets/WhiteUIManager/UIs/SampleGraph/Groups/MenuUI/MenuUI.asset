@@ -9,6 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: edf67d31e3e3dff4c8b339525016b272, type: 3}
-  m_Name: Rim
+  m_Script: {fileID: 11500000, guid: 789d2bf9758d470f9b63782cba6d31bc, type: 3}
+  m_Name: MenuUI
   m_EditorClassIdentifier: 
+  <GroupName>k__BackingField: MenuUI

@@ -15,22 +15,21 @@ MonoBehaviour:
   <FileName>k__BackingField: SampleGraph
   <UIGroups>k__BackingField:
     list:
-    - Key: {fileID: 11400000, guid: 0df7323dfc829d840bf55804e44ac6bd, type: 2}
+    - Key: {fileID: 11400000, guid: e2f669bd6d43cb8458f6b40ee052c59b, type: 2}
       Value:
-      - {fileID: 11400000, guid: e96ed411e0c6dbb4ea682ed6818f5f56, type: 2}
-      - {fileID: 11400000, guid: dc54931621ed0cf42b7aa08e0f427a30, type: 2}
-      - {fileID: 11400000, guid: 54834eaf6c9abbd4185abbb6d4694325, type: 2}
-      - {fileID: 11400000, guid: 2f4de226cffac324e9532387c7e0b493, type: 2}
-      - {fileID: 11400000, guid: b5c3c522bdfbdcd41a8f92a704b39e50, type: 2}
-      - {fileID: 11400000, guid: d2bf68cd833ebfe46ad84eb216849de4, type: 2}
-      - {fileID: 11400000, guid: aaf315118bfa64d4aa36f39c3cb01f47, type: 2}
-      - {fileID: 11400000, guid: e2c0c343785f0dd42abd832f20abdd97, type: 2}
-      - {fileID: 11400000, guid: 6e0a473a52e231b45809bb83bf24c512, type: 2}
-      - {fileID: 11400000, guid: 68334513fd6ad1d43a3ca05d555d8cf3, type: 2}
-      - {fileID: 11400000, guid: 10a3b02389806db48b42ade3ad84471c, type: 2}
-      - {fileID: 11400000, guid: 639e7015898940843b4cbd767bbf14cf, type: 2}
+      - {fileID: 11400000, guid: 28632081149e10843ac8d55e509dff97, type: 2}
+      - {fileID: 11400000, guid: 216680686b1ff624fba421d8c90d87fb, type: 2}
+      - {fileID: 11400000, guid: 087801437b5664a49baae28343c585b4, type: 2}
+      - {fileID: 11400000, guid: 742643b441eef04409b86c245cac38a8, type: 2}
+      - {fileID: 11400000, guid: 7b5975aa8f283db42aec4ff022adca6a, type: 2}
+      - {fileID: 11400000, guid: 256c29f3449d8104e8cf5308cc5062f7, type: 2}
+      - {fileID: 11400000, guid: 853be7add0fddd945b2ba2cdb86d2ead, type: 2}
+      - {fileID: 11400000, guid: 501444ceaba1019418b911227172cec6, type: 2}
+      - {fileID: 11400000, guid: baa874c2d7a8a0b498bde3710674abb4, type: 2}
+      - {fileID: 11400000, guid: 3b90311faaf7b8042849f1486d1b92bf, type: 2}
+      - {fileID: 11400000, guid: 22febfca62896f84da5690fc0b4f9d51, type: 2}
     - Key: {fileID: 11400000, guid: 716e5915df5e71b45b0399a20e65f3eb, type: 2}
       Value:
       - {fileID: 11400000, guid: 95025c79849ba3346ac8f546c3d054fe, type: 2}
-      - {fileID: 11400000, guid: 2974ded7be4ddad4ca463ca52732b4a1, type: 2}
+      - {fileID: 11400000, guid: 35172fce17fde584e91d2a073b254a25, type: 2}
   <UngroupedUIs>k__BackingField: []
