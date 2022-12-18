@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -28,13 +29,13 @@ namespace WUI.Editor.Utilities
         private static Dictionary<string, WUI_Group> _loadedGroups;
         private static Dictionary<string, WUI_Node> _loadedNodes;
 
+        private static string _graphDataInstanceID;
+
         public static void Initialize(WUI_GraphView graphView, string graphName)
         {
             _graphView = graphView;
             
             _graphFileName = graphName;
-            
-            _containerFolderPath = $"Assets/WhiteUIManager/UIs/{_graphFileName}";
 
             _groups = new List<WUI_Group>();
             _nodes = new List<WUI_Node>();
@@ -46,53 +47,102 @@ namespace WUI.Editor.Utilities
 
             _loadedNodes = new Dictionary<string, WUI_Node>();
         }
-        
+
         #region Save Methods
 
+        public static void SaveNode(WUI_Node node)
+        {
+            var graphData = GetGraphData();
+
+            var nodeSO = GetNodeByID(node.ID);
+
+            if (nodeSO == null)
+            {
+                var g_data = LoadGraphData();
+                
+                nodeSO = ScriptableObject.CreateInstance<WUI_UI_SO>();
+                
+                nodeSO.name = node.UIName;
+                
+                AssetDatabase.AddObjectToAsset(nodeSO, g_data);
+                AssetDatabase.SaveAssets();
+                
+                graphData.Nodes.Add(nodeSO);
+            }
+
+            var groupID = "";
+
+            if (node.Group != null) groupID = node.Group.ID;
+            
+            nodeSO.Initialize(
+                groupID,
+                node.ID,
+                node.UIName,
+                node.UIInformation,
+                node.PreviousUI,
+                node.NextUI,
+                node.NodeType,
+                node.IsStartingNode());
+
+            _graphView.AddElement(node);
+        }
+        
         public static void Save()
         {
             CreateStaticFolders();
 
             GetElementsFromGraphView();
 
-            var graphData  = CreateAsset<WUI_GraphSaveData_SO>("Assets/WhiteUIManager/Graphs", $"{_graphFileName}");
+            var path = AssetDatabase.GetAssetPath(int.Parse(_graphDataInstanceID));
             
+            var graphData  = AssetDatabase.LoadAssetAtPath<WUI_GraphSaveData_SO>(path);
+
             graphData.Initialize(_graphFileName);
 
-            var uiContainer = CreateAsset<WUI_UIContainer_SO>(_containerFolderPath, _graphFileName);
-            
-            uiContainer.Initialize(_graphFileName);
+            SaveGroups(graphData);
 
-            SaveGroups(graphData, uiContainer);
-
-            SaveNodes(graphData, uiContainer);
+            SaveNodes(graphData);
             
             SaveAsset(graphData);
-            SaveAsset(uiContainer);
         }
 
         #endregion
 
         #region Load Methods
 
-        public static void Load()
+        public static WUI_UI_SO GetNodeByName(string nodeName)
         {
-            var graphData = LoadAsset<WUI_GraphSaveData_SO>("Assets/WhiteUIManager/Graphs", _graphFileName);
+            var graphData = GetGraphData();
 
-            if (graphData == null)
-            { 
-                EditorUtility.DisplayDialog(
-                    "Couldn't load the file!",
-                    "The file at the following path could not be found\n\n"+
-                    $"Assets/WhiteUIManager/Graphs/{_graphFileName}\n\n"+
-                    "Make sure you chose the right file and it's placed at the folder path mentioned above.",
-                    "Thanks!");
+            return graphData.Nodes.FirstOrDefault(n => n.UIName == nodeName);
+        }
+        
+        public static WUI_UI_SO GetNodeByID(string nodeID)
+        {
+            var graphData = GetGraphData();
 
-                return;
-            }
+            return graphData.Nodes.Count < 1 ?
+                null :
+                graphData.Nodes.FirstOrDefault(n => n.ID == nodeID);
+        }
+        
+        public static WUI_GraphSaveData_SO GetGraphData()
+        {
+            return LoadGraphData();
+        }
+        
+        public static async void Load(string instanceID)
+        {
+            _graphDataInstanceID = instanceID;
+            
+            var graphData = LoadGraphData();
+
+            if (graphData == null) return;
+            
+            graphData.Initialize(graphData.FileName);
 
             WUI_Toolbar.UpdateFileName(graphData.FileName);
-            
+
             LoadGroups(graphData.Groups);
             LoadNodes(graphData.Nodes);
             LoadNodesConnections();
@@ -100,6 +150,8 @@ namespace WUI.Editor.Utilities
 
         private static void LoadGroups(List<WUI_GroupSaveData> groups)
         {
+            if (groups.Count < 1) return;
+            
             foreach (var groupData in groups)
             {
                 var group = _graphView.CreateGroup(groupData.Name, groupData.Position);
@@ -110,18 +162,20 @@ namespace WUI.Editor.Utilities
             }
         }
 
-        public static WUI_NodeSaveData GetNodeSO(string nodeID)
+        public static WUI_UI_SO GetNodeSO(string nodeID)
         {
-            var asset = LoadAsset<WUI_GraphSaveData_SO>("Assets/WhiteUIManager/Graphs", _graphFileName);
+            var asset = LoadGraphData();
 
             return asset.Nodes.FirstOrDefault(node => node.ID == nodeID);
         }
         
-        private static void LoadNodes(List<WUI_NodeSaveData> nodes)
+        private static void LoadNodes(List<WUI_UI_SO> nodes)
         {
+            if (nodes.Count < 1) return;
+            
             foreach (var nodeData in nodes)
             {
-                if(_graphView.CreateNode(nodeData.Name, nodeData.NodeType, nodeData.Position, false) is not WUI_Node node) continue;
+                if(_graphView.CreateNode(nodeData.UIName, nodeData.NodeType, nodeData.Position, false) is not WUI_Node node) continue;
 
                 node.ID = nodeData.ID;
                 node.NextUI = nodeData.NextUI;
@@ -145,6 +199,8 @@ namespace WUI.Editor.Utilities
 
         private static void LoadNodesConnections()
         {
+            if (_loadedNodes.Count < 1) return;
+            
             foreach (var loadedNode in _loadedNodes)
             {
                 var outputPort = loadedNode.Value.outputContainer.Children().FirstOrDefault() as Port;
@@ -187,14 +243,14 @@ namespace WUI.Editor.Utilities
         
         #region Groups
 
-        private static void SaveGroups(WUI_GraphSaveData_SO graphData, WUI_UIContainer_SO uiContainer)
+        private static void SaveGroups(WUI_GraphSaveData_SO graphData)
         {
             var groupNames = new List<string>();
             
             foreach (var group in _groups)
             {
                 SaveGroupToGraph(group, graphData);
-                SaveGroupToScriptableObject(group, uiContainer);
+                //SaveGroupToScriptableObject(group, uiContainer);
                 
                 groupNames.Add(group.title);
             }
@@ -251,7 +307,7 @@ namespace WUI.Editor.Utilities
 
         #region Nodes
 
-        private static void SaveNodes(WUI_GraphSaveData_SO graphData, WUI_UIContainer_SO uiContainer)
+        private static void SaveNodes(WUI_GraphSaveData_SO graphData)
         {
             var groupedNodeNames = new WUI_SerializableDictionary<string, List<string>>();
             
@@ -259,8 +315,7 @@ namespace WUI.Editor.Utilities
             
             foreach (var node in _nodes)
             {
-                SaveNodeToGraph(node, graphData);
-                SaveNodeToScriptableObject(node, uiContainer);
+                SaveNode(node);
 
                 if (node.Group != null)
                 {
@@ -279,59 +334,13 @@ namespace WUI.Editor.Utilities
             UpdateOldUngroupedNodes(ungroupedNodeNames, graphData);
         }
 
-        private static void SaveNodeToScriptableObject(WUI_Node node, WUI_UIContainer_SO uiContainer)
-        {
-            WUI_UI_SO ui;
-
-            if (node.Group != null)
-            {
-                ui = CreateAsset<WUI_UI_SO>($"{_containerFolderPath}/Groups/{node.Group.title}/UIs", node.UIName);
-
-                uiContainer.UIGroups.AddItem(_createdUIGroups[node.Group.ID], ui);
-            }
-            else
-            {
-                ui = CreateAsset<WUI_UI_SO>($"{_containerFolderPath}/Global/UIs", node.UIName);
-                
-                uiContainer.UngroupedUIs.Add(ui);
-            }
-            
-            ui.Initialize(
-                node.UIName,
-                node.UIInformation,
-                node.PreviousUI,
-                node.NextUI,
-                node.NodeType,
-                node.IsStartingNode());
-            
-            _createUIs.Add(node.ID, ui);
-
-            SaveAsset(ui);
-        }
-
-        private static void SaveNodeToGraph(WUI_Node node, WUI_GraphSaveData_SO graphData)
-        {
-            var nodeData = new WUI_NodeSaveData
-            {
-                ID = node.ID,
-                Name = node.UIName,
-                PreviousUI = node.PreviousUI,
-                NextUI = node.NextUI,
-                GroupID = node.Group?.ID,
-                NodeType = node.NodeType,
-                Position = node.GetPosition().position
-            };
-            
-            graphData.Nodes.Add(nodeData);
-            
-            _graphView.AddElement(node);
-        }
-        
         private static void UpdateUIConnections()
         {
             foreach (var node in _nodes)
             {
-                var ui = _createUIs[node.ID];
+                var ui = _createUIs.FirstOrDefault(p => p.Key == node.ID).Value;
+                
+                if(ui == null) continue;
 
                 var previousUI = ui.PreviousUI;
                 var nextUI = ui.NextUI;
@@ -391,16 +400,6 @@ namespace WUI.Editor.Utilities
             CreateFolder("Assets/WhiteUIManager", "Graphs");
             
             CreateFolder("Assets", "WhiteUIManager");
-            
-            CreateFolder("Assets/WhiteUIManager", "UIs");
-            
-            CreateFolder("Assets/WhiteUIManager/UIs", _graphFileName);
-            
-            CreateFolder(_containerFolderPath, "Global");
-            
-            CreateFolder(_containerFolderPath, "Groups");
-            
-            CreateFolder($"{_containerFolderPath}/Global", "UIs");
         }
 
         #endregion
@@ -448,7 +447,7 @@ namespace WUI.Editor.Utilities
         
         private static T CreateAsset<T>(string path, string assetName) where T : ScriptableObject
         {
-            var fullPath = $"{path}/{assetName}.asset";
+            var fullPath = $"{path}";
 
             var asset = LoadAsset<T>(path, assetName);
 
@@ -461,6 +460,13 @@ namespace WUI.Editor.Utilities
             return asset;
         }
 
+        private static WUI_GraphSaveData_SO LoadGraphData()
+        {
+            var path = AssetDatabase.GetAssetPath(int.Parse(_graphDataInstanceID));
+            
+            return AssetDatabase.LoadAssetAtPath<WUI_GraphSaveData_SO>(path);
+        }
+        
         private static T LoadAsset<T>(string path, string assetName) where T : ScriptableObject
         {
             var fullPath = $"{path}/{assetName}.asset";
@@ -473,7 +479,7 @@ namespace WUI.Editor.Utilities
             AssetDatabase.DeleteAsset($"{path}/{assetName}.asset");
         }
         
-        private static void SaveAsset(Object asset)
+        public static void SaveAsset(Object asset)
         {
             EditorUtility.SetDirty(asset);
             

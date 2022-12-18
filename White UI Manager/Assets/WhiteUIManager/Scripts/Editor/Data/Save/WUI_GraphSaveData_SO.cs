@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEngine;
 using WUI.Editor.Window;
+using WUI.Runtime.ScriptableObjects;
 using WUI.Utilities;
 
 namespace WUI.Editor.Data.Save
@@ -14,7 +15,7 @@ namespace WUI.Editor.Data.Save
         
         public List<WUI_GroupSaveData> Groups { get; set; }
         
-        public List<WUI_NodeSaveData> Nodes { get; set; }
+        [field:SerializeField] public List<WUI_UI_SO> Nodes { get; set; }
         
         public List<string> OldGroupNames { get; set; }
         
@@ -22,7 +23,10 @@ namespace WUI.Editor.Data.Save
         
         public WUI_SerializableDictionary<string, List<string>> OldGroupedNames { get; set; }
 
-        private void Awake() => EditorApplication.projectChanged +=  SetFileName;
+        private void Awake()
+        {
+            EditorApplication.projectChanged += SetFileName;
+        }
 
         private void OnDestroy() => EditorApplication.projectChanged -= SetFileName;
 
@@ -39,9 +43,9 @@ namespace WUI.Editor.Data.Save
         public void Initialize(string fileName)
         {
             FileName = fileName;
-
-            Groups = new List<WUI_GroupSaveData>();
-            Nodes = new List<WUI_NodeSaveData>();
+            
+            Groups ??= new List<WUI_GroupSaveData>();
+            Nodes ??= new List<WUI_UI_SO>();
         }
 
         [OnOpenAsset]
@@ -49,9 +53,9 @@ namespace WUI.Editor.Data.Save
         {
             var project = EditorUtility.InstanceIDToObject(instanceID) as WUI_GraphSaveData_SO;
             if (project == null) return false;
-            
+
             WUI_EditorWindow.OpenWindow();
-            WUI_EditorWindow.GetGraphView().LoadData(AssetDatabase.GetAssetPath(instanceID));
+            WUI_EditorWindow.GetGraphView().LoadData(AssetDatabase.GetAssetPath(instanceID), instanceID.ToString());
             return true;
         }
     }

@@ -8,11 +8,6 @@ Toolbar
     border-radius: 15px;
 }
 
-TextField
-{
-    padding: 4px;
-}
-
 /* BUTTONS */
 
 Button
@@ -24,6 +19,9 @@ Button
     -unity-text-align: middle-center;
     padding: 12px;
     margin-top: 11px;
+    width: 50%;
+    display: flex;
+    max-width: 200px;
 }
 
 Button:hover
@@ -39,36 +37,6 @@ Button:active
 }
 
 /* BUILT-IN */
-
-.unity-text-field__label
-{
-    padding: 4px;
-}
-
-TextField:focus > .unity-text-field__label
-{
-    color: var(--wui-colors-window-yellow-1);
-}
-
-.unity-text-field__input
-{
-    background-color: var(--wui-colors-window-foreground-1);
-    border-color: var(--wui-colors-window-outline-1);
-    border-radius: 4px;
-    max-height: 25px;
-    min-width: 120px;
-    padding-left: 6px;
-}
-
-.unity-text-field
-{
-    padding-top: 15px;
-}
-
-.unity-text-field__input:focus
-{
-    color: var(--wui-colors-window-yellow-1);
-}
 
 .wui-toolbar__button_selected
 {

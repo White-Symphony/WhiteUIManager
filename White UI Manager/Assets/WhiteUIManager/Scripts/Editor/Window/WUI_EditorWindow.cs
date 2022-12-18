@@ -1,8 +1,4 @@
-using System;
-using System.Threading.Tasks;
 using UnityEditor;
-using UnityEditor.Compilation;
-using UnityEngine;
 using UnityEngine.UIElements;
 using WUI.Editor.Graph;
 
@@ -20,38 +16,11 @@ namespace WUI.Editor.Window
         public static void OpenWindow()
         {
             GetWindow<WUI_EditorWindow>("White UI Editor");
-
-            CompilationPipeline.compilationStarted  += OnStartCompile;
-            CompilationPipeline.compilationFinished += OnCompiled;
-        }
-
-        public void OnDestroy()
-        {
-            CompilationPipeline.compilationStarted  -= OnStartCompile;
-            CompilationPipeline.compilationFinished -= OnCompiled;
         }
 
         public static WUI_GraphView GetGraphView() => _graphView;
 
         public WUI_Toolbar GetToolbar() => _toolbar;
-        
-        private static void OnStartCompile(object obj)
-        {
-            var fileName = WUI_Toolbar.GetFileName();
-            
-            PlayerPrefs.SetString("GraphName", fileName);
-            
-            WUI_IOUtility.Initialize(_graphView, fileName);
-            WUI_IOUtility.Save();
-        }
-         
-        private static void OnCompiled(object obj)
-        {
-            //var fileName = PlayerPrefs.GetString("GraphName");
-            // 
-            //WUI_IOUtility.Initialize(_graphView, fileName);
-            //WUI_IOUtility.Load();
-        }
 
         private void OnEnable() 
         {

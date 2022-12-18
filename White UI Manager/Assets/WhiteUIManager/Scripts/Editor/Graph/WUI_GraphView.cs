@@ -5,7 +5,6 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using WUI.Runtime.ScriptableObjects;
 using WUI.Utilities;
 
 namespace WUI.Editor.Graph
@@ -28,51 +27,28 @@ namespace WUI.Editor.Graph
         private readonly WUI_SerializableDictionary<string, WUI_GroupErrorData> _groups;
         private readonly WUI_SerializableDictionary<WUI_Group, WUI_SerializableDictionary<string, WUI_NodeErrorData>> _groupedNodes;
 
-        private int _namesErrorAmount;
-
         private readonly WUI_IManipulator _manipulator;
         
         private readonly WUI_Graph_Feature _miniMap;
         private readonly WUI_Graph_Feature _gridBackground;
 
-        public int NamesErrorAmount
-        {
-            get => _namesErrorAmount;
-            set
-            {
-                _namesErrorAmount = value;
+        public int NamesErrorAmount { get; set; }
 
-                switch (_namesErrorAmount)
-                {
-                    case 0:
-                        _editorWindow.GetToolbar().SaveButtonEnableState(true);
-                        break;
-                    case 1:
-                        _editorWindow.GetToolbar().SaveButtonEnableState(false);
-                        break;
-                }
-            }
-        }
-        
         public WUI_GraphView(WUI_EditorWindow editorWindow)
         {
-            RegisterCallback<MouseUpEvent>(_ =>
+            RegisterCallback<MouseOverEvent>(_ =>
             {
                 if (selection.Count != 1)
                 {
                     Selection.activeObject = null;
                     return;
                 }
-
+                
                 if (selection[0] is not WUI_Node node) return;
 
-                var uiSO = ScriptableObject.CreateInstance<WUI_UI_SO>();
-                
-                uiSO.NextUI = node.NextUI;
-                uiSO.PreviousUI = node.PreviousUI;
-                uiSO.UIName = node.UIName;
-                uiSO.UIInformation = node.UIInformation;
-                uiSO.NodeType = node.NodeType;
+                var uiSOs = WUI_IOUtility.GetGraphData();
+
+                var uiSO = uiSOs.Nodes.First(n => n.ID == node.ID);
 
                 Selection.activeObject = uiSO;
 
@@ -128,9 +104,9 @@ namespace WUI.Editor.Graph
             AddStyles();
         }
 
-        public void LoadData(string filePath)
+        public void LoadData(string filePath, string instanceID)
         {
-            _editorWindow.GetToolbar().LoadToInputPath(filePath);
+            _editorWindow.GetToolbar().LoadToInputPath(filePath, instanceID);
         }
         
         #region Override Methods
@@ -229,6 +205,8 @@ namespace WUI.Editor.Graph
             AddUngroupedNode(node);
             
             AddElement(node);
+            
+            WUI_IOUtility.SaveNode(node);
 
             return node;
         }
@@ -298,11 +276,8 @@ namespace WUI.Editor.Graph
                 
                 foreach (var node in nodesToDelete)
                 {
-                    if (node.Group != null)
-                    {
-                        node.Group.RemoveElement(node);
-                    }
-                    
+                    node.Group?.RemoveElement(node);
+
                     RemoveUngroupedNode(node);
                     
                     node.DisconnectAllPorts();

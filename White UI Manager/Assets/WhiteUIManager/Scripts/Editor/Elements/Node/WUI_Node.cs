@@ -94,11 +94,18 @@ namespace WUI.Editor.Elements
                     }
                 }
                 
+                var nodeData = WUI_IOUtility.GetNodeByID(ID);
+
                 if (Group == null)
                 {
                     _graphView.RemoveUngroupedNode(this);
 
                     UIName = textField.value;
+
+                    nodeData.UIName = UIName;
+                    nodeData.name = UIName;
+                
+                    WUI_IOUtility.SaveAsset(nodeData);
                     
                     _graphView.AddUngroupedNode(this);
 
@@ -108,8 +115,13 @@ namespace WUI.Editor.Elements
                 var currentGroup = Group;
                 
                 _graphView.RemoveGroupedNode(this, Group);
-                
+
                 UIName = textField.value;
+
+                nodeData.UIName = UIName;
+                nodeData.name = UIName;
+                
+                WUI_IOUtility.SaveAsset(nodeData);
 
                 _graphView.AddGroupedNode(this, currentGroup);
             });

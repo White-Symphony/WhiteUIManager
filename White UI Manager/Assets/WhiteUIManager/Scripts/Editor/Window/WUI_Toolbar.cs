@@ -17,9 +17,7 @@ namespace WUI.Editor.Window
         
         private string _filePath;
         private static string _fileName;
-        
-        private readonly Button _saveButton;
-        
+
         private readonly Button _miniMapButton;
 
         public static string GetFileName() => _fileName;
@@ -32,17 +30,10 @@ namespace WUI.Editor.Window
             
             _toolbar = new Toolbar();
 
-            _saveButton = WUI_ElementUtility.CreateButton("Save", Save);
-            
-            _saveButton.SetEnabled(false);
-            
             var clearButton = WUI_ElementUtility.CreateButton("Clear", Clear);
-            var resetButton = WUI_ElementUtility.CreateButton("Reset", ResetGraph);
             _miniMapButton = WUI_ElementUtility.CreateButton("Mini Map", ToggleMiniMap);
             
-            _toolbar.Add(_saveButton);
             _toolbar.Add(clearButton);
-            _toolbar.Add(resetButton);
             _toolbar.Add(_miniMapButton);
 
             _toolbar.AddStyleSheets("WhiteUI/WUI_ToolbarStyles.uss");
@@ -50,24 +41,18 @@ namespace WUI.Editor.Window
 
         #region Toolbar Actions
 
-        public void LoadToInputPath(string filePath)
+        public void LoadToInputPath(string filePath, string instanceID)
         {
             if (string.IsNullOrEmpty(filePath)) return;
-            
+
             SetNamesByPath(filePath);
             
             Clear();
 
             WUI_IOUtility.Initialize(_graphView, _fileName);
-            WUI_IOUtility.Load();
+            WUI_IOUtility.Load(instanceID);
         }
 
-        private void Save()
-        {
-            WUI_IOUtility.Initialize(_graphView, _fileName);
-            WUI_IOUtility.Save();
-        }
-        
         private static void Clear()
         {
             _graphView.ClearGraph();
@@ -79,21 +64,10 @@ namespace WUI.Editor.Window
             
             _miniMapButton.ToggleInClassList("wui-toolbar__button_selected");
         }
-        
-        private void ResetGraph()
-        {
-            Clear();
-
-            if (string.IsNullOrEmpty(_filePath)) return;
-            
-            LoadToInputPath(_filePath);
-        }
 
         #endregion
 
         #region Utilities
-
-        public void SaveButtonEnableState(bool state) => _saveButton.SetEnabled(state);
 
         public static void UpdateFileName(string fileName) => _fileName = fileName;
         
