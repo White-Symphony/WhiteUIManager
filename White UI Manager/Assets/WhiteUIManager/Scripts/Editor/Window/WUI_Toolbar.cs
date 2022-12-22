@@ -33,6 +33,8 @@ namespace WUI.Editor.Window
             var clearButton = WUI_ElementUtility.CreateButton("Clear", Clear);
             _miniMapButton = WUI_ElementUtility.CreateButton("Mini Map", ToggleMiniMap);
             
+            clearButton.AddToClassList("wui-toolbar__button_margined");
+
             _toolbar.Add(clearButton);
             _toolbar.Add(_miniMapButton);
 

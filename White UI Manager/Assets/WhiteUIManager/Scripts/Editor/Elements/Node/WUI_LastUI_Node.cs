@@ -2,6 +2,7 @@
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using WUI.Utilities;
 
 namespace WUI.Editor.Elements
 {
@@ -25,7 +26,7 @@ namespace WUI.Editor.Elements
         {
             _icon = new Image
             {
-                image = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/WhiteUIManager/ART/Textures/Icons/Black_Node_Icon.png")
+                image = WUI_EditorUtilities.GetBlackIcon("Node")
             };
             
             base.SetIcon();

@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using WUI.Editor.Data.Save;
 using WUI.Editor.Graph;
+using WUI.Editor.Manipulator;
 using WUI.Utilities;
 
 namespace WUI.Editor.Elements
@@ -37,6 +37,8 @@ namespace WUI.Editor.Elements
 
         public virtual void Initialize(string nodeName, WUI_GraphView graphView, WUI_NodeType nodeType, Vector2 position)
         {
+            AddManipulators();
+            
             ID = Guid.NewGuid().ToString();
             
             _graphView = graphView;
@@ -237,6 +239,16 @@ namespace WUI.Editor.Elements
 
         #region Utility Methods
 
+        public void SetErrorStyle(Color color)
+        {
+            mainContainer.style.backgroundColor = color;
+        }
+
+        public void ResetStyle()
+        {
+            mainContainer.style.backgroundColor = _defaultBackgroundColor;
+        }
+        
         public void DisconnectAllPorts()
         {
             DisconnectPorts(inputContainer);
@@ -260,15 +272,10 @@ namespace WUI.Editor.Elements
                 _graphView.DeleteElements(edges);
             }
         }
-        
-        public void SetErrorStyle(Color color)
-        {
-            mainContainer.style.backgroundColor = color;
-        }
 
-        public void ResetStyle()
+        private void AddManipulators()
         {
-            mainContainer.style.backgroundColor = _defaultBackgroundColor;
+            contentContainer.AddManipulator(new WUI_SelectableNode(this));
         }
         
         #endregion

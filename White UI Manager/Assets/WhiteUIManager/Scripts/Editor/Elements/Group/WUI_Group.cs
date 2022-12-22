@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
+using WUI.Editor.Manipulator;
 using WUI.Editor.Utilities;
 
 namespace WUI.Editor.Elements
@@ -14,13 +16,15 @@ namespace WUI.Editor.Elements
         private readonly Color _defaultBorderColor;
         private readonly float _defaultBorderWidth;
 
-        public WUI_Group(string groupTitle, Vector2 position)
+        public WUI_Group(string id, string title, Vector2 position)
         {
-            ID = Guid.NewGuid().ToString();
+            headerContainer.AddManipulator(new WUI_SelectableGroup(this));
             
-            title = groupTitle;
+            ID = id;
+            
+            this.title = title;
 
-            OldTitle = groupTitle;
+            OldTitle = title;
             
             SetPosition(new Rect(position, Vector2.zero));
             

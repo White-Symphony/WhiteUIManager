@@ -1,6 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-6706688640375841982
+--- !u!114 &-6129939264846898810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edf67d31e3e3dff4c8b339525016b272, type: 3}
+  m_Name: BasicUI
+  m_EditorClassIdentifier: 
+--- !u!114 &-3053724591069945938
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -12,7 +24,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edf67d31e3e3dff4c8b339525016b272, type: 3}
   m_Name: HomeUI
   m_EditorClassIdentifier: 
---- !u!114 &-1844394912591922358
+--- !u!114 &-1542525234959425726
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -22,7 +34,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edf67d31e3e3dff4c8b339525016b272, type: 3}
-  m_Name: BasicUI
+  m_Name: LastUI
   m_EditorClassIdentifier: 
 --- !u!114 &11400000
 MonoBehaviour:
@@ -36,10 +48,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4e71d1ad6544cb7985553a9c205dc95, type: 3}
   m_Name: test
   m_EditorClassIdentifier: 
+  <Groups>k__BackingField:
+  - {fileID: 7431138487961389449}
   <Nodes>k__BackingField:
-  - {fileID: -6706688640375841982}
-  - {fileID: -1844394912591922358}
---- !u!114 &962787598800580511
+  - {fileID: -3053724591069945938}
+  - {fileID: -6129939264846898810}
+  - {fileID: -1542525234959425726}
+  - {fileID: 580102724229049385}
+--- !u!114 &580102724229049385
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -49,5 +65,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: edf67d31e3e3dff4c8b339525016b272, type: 3}
-  m_Name: LastUI
+  m_Name: Wait Time
   m_EditorClassIdentifier: 
+--- !u!114 &7431138487961389449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 789d2bf9758d470f9b63782cba6d31bc, type: 3}
+  m_Name: UI Group
+  m_EditorClassIdentifier: 
+  <Name>k__BackingField: UI Group

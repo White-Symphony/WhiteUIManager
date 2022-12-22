@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfbf2c6661594864394780ac20a05749, type: 3}
+  m_Name: WhiteTextureDatabase
+  m_EditorClassIdentifier: 
+  TextureGroups:
+  - Name: Black
+    Textures:
+    - Name: Clock
+      Texture: {fileID: 2800000, guid: 8dc20bed945caec4ba98d61386a1d2af, type: 3}
+    - Name: Enter
+      Texture: {fileID: 2800000, guid: 7bc11fbf4dc5aa4438e12855baa34ac7, type: 3}
+    - Name: Exit
+      Texture: {fileID: 2800000, guid: 2c7e451712a1ce2438df69cbb6a618c9, type: 3}
+    - Name: Graph
+      Texture: {fileID: 2800000, guid: a79bc47e0db9386469325b0a6fa55950, type: 3}
+    - Name: Group
+      Texture: {fileID: 2800000, guid: a4b1b58c2e962194198b98cf3c0ce48b, type: 3}
+    - Name: Home
+      Texture: {fileID: 2800000, guid: 244237c699a924046a07424058644c6c, type: 3}
+    - Name: Node
+      Texture: {fileID: 2800000, guid: 91f45afceec79d446915357aa0c7cc53, type: 3}
+  - Name: Coloured
+    Textures:
+    - Name: Clock
+      Texture: {fileID: 2800000, guid: 367a0bcea1593ff4d8ff418a5233aada, type: 3}
+    - Name: Enter
+      Texture: {fileID: 2800000, guid: f35bb4cd5b8860d43b6bff071ae19395, type: 3}
+    - Name: Exit
+      Texture: {fileID: 2800000, guid: cd1dea064de8d774c9eed61eb2c10c20, type: 3}
+    - Name: Graph
+      Texture: {fileID: 2800000, guid: 91667e43f1aaace4aa7c21e52d90a1a8, type: 3}
+    - Name: Group
+      Texture: {fileID: 2800000, guid: dcd3d35f50026b741a2549c04699faec, type: 3}
+    - Name: Home
+      Texture: {fileID: 2800000, guid: 321c80f18a4c9c34b89fc9b5dfa303b8, type: 3}
+    - Name: Node
+      Texture: {fileID: 2800000, guid: 3cb4580197b074e4e893afe20007d2d8, type: 3}

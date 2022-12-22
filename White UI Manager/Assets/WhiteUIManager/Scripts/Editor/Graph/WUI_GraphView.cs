@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using WUI.Runtime.ScriptableObjects;
 using WUI.Utilities;
 
 namespace WUI.Editor.Graph
@@ -36,24 +37,6 @@ namespace WUI.Editor.Graph
 
         public WUI_GraphView(WUI_EditorWindow editorWindow)
         {
-            RegisterCallback<MouseOverEvent>(_ =>
-            {
-                if (selection.Count != 1)
-                {
-                    Selection.activeObject = null;
-                    return;
-                }
-                
-                if (selection[0] is not WUI_Node node) return;
-
-                var uiSOs = WUI_IOUtility.GetGraphData();
-
-                var uiSO = uiSOs.Nodes.First(n => n.ID == node.ID);
-
-                Selection.activeObject = uiSO;
-
-            }, TrickleDown.TrickleDown);
-            
             _editorWindow = editorWindow;
 
             #region Nodes
@@ -170,7 +153,9 @@ namespace WUI.Editor.Graph
 
         public WUI_Group CreateGroup(string title, Vector2 mousePosition)
         {
-            var group = new WUI_Group(title, mousePosition);
+            var id = Guid.NewGuid().ToString();
+            
+            var group = new WUI_Group(id, title, mousePosition);
             
             AddGroup(group);
             
@@ -186,10 +171,50 @@ namespace WUI.Editor.Graph
             }
 
             #endregion
+            
+            WUI_IOUtility.AddGroup(group);
 
             return group;
         }
 
+        public Group AddGroup(WUI_Group_SO groupSO)
+        {
+            var groupData = WUI_IOUtility.GetGroupByID(groupSO.ID);
+
+            if (groupData == null) return null;
+
+            var group = new WUI_Group(groupSO.ID, groupSO.Name, groupSO.Position);
+
+            AddGroup(group);
+            
+            AddElement(group);
+
+            WUI_IOUtility.AddGroup(group);
+
+            return group;
+        }
+
+        public Node AddNode(WUI_UI_SO uiSO)
+        {
+            var type = Type.GetType($"WUI.Editor.Elements.WUI_{uiSO.NodeType}_Node");
+
+            if (type == null) return null;
+
+            var nodeData = WUI_IOUtility.GetNodeByID(uiSO.ID);
+
+            if (nodeData == null) return null;
+            
+            if (Activator.CreateInstance(type) is not WUI_Node node) return null;
+
+            node.Initialize(nodeData.UIName, this, uiSO.NodeType, nodeData.Position);
+
+            AddUngroupedNode(node);
+            
+            AddElement(node);
+
+            return node;
+        }
+        
         public Node CreateNode(string nodeName, WUI_NodeType nodeType, Vector2 position, bool shouldDraw = true)
         {
             var type = Type.GetType($"WUI.Editor.Elements.WUI_{nodeType}_Node");
@@ -199,14 +224,14 @@ namespace WUI.Editor.Graph
             if (Activator.CreateInstance(type) is not WUI_Node node) return default;
 
             node.Initialize(nodeName, this, nodeType, position);
-            
+
             if(shouldDraw) node.Draw();
 
             AddUngroupedNode(node);
             
             AddElement(node);
             
-            WUI_IOUtility.SaveNode(node);
+            WUI_IOUtility.AddNode(node, position);
 
             return node;
         }
@@ -270,6 +295,8 @@ namespace WUI.Editor.Graph
                     RemoveGroup(group);
                     
                     RemoveElement(group);
+                    
+                    WUI_IOUtility.RemoveGroupByID(group.ID);
                 }
 
                 DeleteElements(edgesToDelete);
@@ -283,6 +310,8 @@ namespace WUI.Editor.Graph
                     node.DisconnectAllPorts();
 
                     RemoveElement(node);
+
+                    WUI_IOUtility.RemoveNodeByID(node.ID);
                 }
             };
         }
@@ -322,6 +351,13 @@ namespace WUI.Editor.Graph
                 if (group is not WUI_Group wui_group) return;
 
                 wui_group.title = newTitle.RemoveWhitespaces().RemoveSpecialCharacters();
+
+                var groupData = WUI_IOUtility.GetGroupByID(wui_group.ID);
+
+                groupData.Name = wui_group.title;
+                groupData.name = wui_group.title;
+                
+                AssetDatabase.SaveAssets();
                 
                 if (string.IsNullOrEmpty(wui_group.title))
                 {
@@ -350,6 +386,44 @@ namespace WUI.Editor.Graph
         {
             graphViewChanged = (changes) =>
             {
+                if (changes.movedElements != null)
+                {
+                    foreach (var movedElement in changes.movedElements)
+                    {
+                        switch (movedElement)
+                        {
+                            case WUI_Node node:
+                            {
+                                var nodeData = WUI_IOUtility.GetNodeByID(node.ID);
+                        
+                                if(nodeData == null) continue;
+
+                                nodeData.Position = node.GetPosition().position;
+                                break;
+                            }
+                            case WUI_Group group:
+                                var groupData = WUI_IOUtility.GetGroupByID(group.ID);
+
+                                if (groupData == null) continue;
+
+                                groupData.Position = group.GetPosition().position;
+
+                                foreach (var node in nodes.Select(n => n as WUI_Node))
+                                {
+                                    if (node == null) continue;
+                                    
+                                    var nodeData = WUI_IOUtility.GetNodeByID(node.ID);
+
+                                    if (nodeData == null) continue;
+
+                                    nodeData.Position = node.GetPosition().position;
+                                }
+                                
+                                break;
+                        }
+                    }
+                }
+                
                 if (changes.edgesToCreate != null)
                 {
                     foreach (var edge in changes.edgesToCreate)
@@ -511,6 +585,8 @@ namespace WUI.Editor.Graph
             var nodeName = node.UIName.ToLower();
 
             node.Group = group;
+
+            WUI_IOUtility.GetNodeByID(node.ID).GroupID = node.Group.ID;
             
             if (!_groupedNodes.ContainsKey(group))
             {
@@ -548,6 +624,8 @@ namespace WUI.Editor.Graph
             var nodeName = node.UIName.ToLower();
 
             node.Group = null;
+
+            WUI_IOUtility.GetNodeByID(node.ID).GroupID = "";
             
             var groupedNodesList = _groupedNodes[group][nodeName].Nodes;
             

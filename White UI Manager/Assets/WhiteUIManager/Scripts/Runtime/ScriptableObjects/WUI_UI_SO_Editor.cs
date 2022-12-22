@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 using WUI.Editor.Enumerations;
+using WUI.Utilities;
 
 namespace WUI.Runtime.ScriptableObjects
 {
@@ -9,220 +10,65 @@ namespace WUI.Runtime.ScriptableObjects
     {
         private WUI_UI_SO _uiData;
 
-        private GUIStyle _boxStyle;
-        
-        private GUIStyle _titleStyle;
-        private GUIStyle _labelStyle;
-        private GUIStyle _textStyle;
-
-        private Texture2D _nodeTexture;
-        private Texture2D _enterTexture;
-        private Texture2D _exitTexture;
-        
-        private void OnEnable()
-        {
-            _uiData = target as WUI_UI_SO;
-
-            _nodeTexture  = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/WhiteUIManager/ART/Textures/Icons/Black_Node_Icon.png");
-            _enterTexture = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/WhiteUIManager/ART/Textures/Icons/Black_Enter_Icon.png");
-            _exitTexture  = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/WhiteUIManager/ART/Textures/Icons/Black_Exit_Icon.png");
-            
-            _boxStyle = new GUIStyle
-            {
-                normal =
-                {
-                    
-                }
-            };
-            
-            _titleStyle = new GUIStyle
-            {
-                fontSize = 25,
-                normal =
-                {
-                    textColor = new Color(1f, 0.79f, 0.23f)
-                },
-                fixedWidth = 50
-            };
-            
-            _labelStyle = new GUIStyle
-            {
-                fontSize = 12,
-                normal =
-                {
-                    textColor = Color.white
-                }
-            };
-
-            _textStyle = new GUIStyle
-            {
-                fontSize = 20,
-                normal =
-                {
-                    textColor = Color.white,
-                    background = SetColor(new Texture2D(1,1), new Color(0.16f, 0.16f, 0.16f))
-                }
-            };
-        }
+        private void OnEnable() => _uiData = target as WUI_UI_SO;
 
         public override void OnInspectorGUI()
         {
             #region UI Title
 
-            Begin_H(_boxStyle);
-
-            #region Icon
-
-            GUILayout.Box(_nodeTexture);
-
-            #endregion
-
-            #region UI Node
-
-            Begin_V(EditorStyles.helpBox);
-
-            EditorGUILayout.LabelField("UI Node", _titleStyle);
-            
-            EditorGUILayout.Space(10);
-            
-            End_V();
-
-            #endregion
-            
-            End_H();
+            WUI_EditorUtilities.TitleWithIcon_Gray("Node", "UI Node");
             
             #endregion
 
             #region UI Name
 
-            Begin_V(EditorStyles.helpBox);
-
-            EditorGUILayout.LabelField("UI Name", _labelStyle);
-            _uiData.UIName = EditorGUILayout.TextArea(_uiData.UIName, _textStyle);
-            
-            End_V();
+            WUI_EditorUtilities.LabelFieldAndText("UI Name", _uiData.UIName, out var newUIName);
+            _uiData.UIName = newUIName;
 
             #endregion
 
-            #region UI Information
+            #region If UI
 
-            Begin_V(EditorStyles.helpBox);
-            
-            EditorGUILayout.LabelField("UI Information", _labelStyle);
-            _uiData.UIInformation = EditorGUILayout.TextArea(_uiData.UIInformation, _textStyle);
-            
-            
-            End_V();
+            if (_uiData.NodeType is WUI_NodeType.BasicUI or WUI_NodeType.HomeUI or WUI_NodeType.LastUI)
+            {
+                WUI_EditorUtilities.TextField("UI Information", _uiData.UIInformation, out var newUIInformation);
+                _uiData.UIInformation = newUIInformation;
+            }
+
+            #endregion
+
+            #region If Wait Time
+
+            if (_uiData.NodeType is WUI_NodeType.WaitTime)
+            {
+                WUI_EditorUtilities.FloatField("Wait Time", 0, out _);
+            }
 
             #endregion
 
             if (_uiData.NodeType != WUI_NodeType.HomeUI)
             {
-                #region Previous Node Title
-                
-                Begin_H(_boxStyle);
-                
-                #region Icon
-
-                GUILayout.Box(_enterTexture);
-
-                #endregion
-
-                #region Text
-
-                Begin_V(EditorStyles.helpBox);
-
-                EditorGUILayout.LabelField("Previous Node", _titleStyle);
-            
-                EditorGUILayout.Space(10);
-            
-                End_V();
-
-                #endregion
-                
-                End_H();
-
-                #endregion
+                WUI_EditorUtilities.TitleWithIcon_Orange("Enter", "Previous Node");
                 
                 #region Previous Node Name
 
-                Begin_V(EditorStyles.helpBox);
-
-                EditorGUILayout.LabelField("Previous UI Name", _labelStyle);
-                _uiData.PreviousUI.Text = EditorGUILayout.TextArea(_uiData.PreviousUI.Text, _textStyle);
-            
-                End_V();
+                WUI_EditorUtilities.TextField("Previous UI Name", _uiData.PreviousUI.Text, out var newPreviousText);
+                _uiData.PreviousUI.Text = newPreviousText;
 
                 #endregion
             }
 
             if (_uiData.NodeType != WUI_NodeType.LastUI)
             {
-                #region Next Node Title
-                
-                Begin_H(_boxStyle);
-                
-                #region Icon
-
-                GUILayout.Box(_exitTexture);
-
-                #endregion
-
-                #region Text
-
-                Begin_V(EditorStyles.helpBox);
-
-                EditorGUILayout.LabelField("Next Node", _titleStyle);
-            
-                EditorGUILayout.Space(10);
-            
-                End_V();
-
-                #endregion
-                
-                End_H();
-
-                #endregion
+                WUI_EditorUtilities.TitleWithIcon_Blue("Exit", "Next Node");
                 
                 #region Next Node Name
 
-                Begin_V(EditorStyles.helpBox);
-
-                EditorGUILayout.LabelField("Next UI Name", _labelStyle);
-                _uiData.NextUI.Text = EditorGUILayout.TextArea(_uiData.NextUI.Text, _textStyle);
-            
-                End_V();
+                WUI_EditorUtilities.TextField("Next UI Name", _uiData.NextUI.Text, out var newNextText);
+                _uiData.NextUI.Text = newNextText;
 
                 #endregion
             }
         }
-
-        #region Utilities
-
-        private static Texture2D SetColor(Texture2D texture, Color color)
-        {
-            var pixels = texture.GetPixels();
-            
-            for (var i = 0; i < pixels.Length; ++i)
-            {
-                pixels[i] = color;
-            }
-            
-            texture.SetPixels(pixels);
-            
-            texture.Apply();
-
-            return texture;
-        }
-        
-        private void Begin_V(GUIStyle guiStyle) => EditorGUILayout.BeginVertical(guiStyle);
-
-        private void End_V() => EditorGUILayout.EndVertical();
-        
-        private void Begin_H(GUIStyle guiStyle) => EditorGUILayout.BeginHorizontal(guiStyle);
-
-        private void End_H() => EditorGUILayout.EndHorizontal();
-
-        #endregion
     }
 }

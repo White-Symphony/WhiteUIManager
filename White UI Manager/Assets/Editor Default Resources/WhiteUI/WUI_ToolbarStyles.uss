@@ -5,7 +5,11 @@ Toolbar
     background-color: var(--wui-colors-window-background-3);
     border-color: var(--wui-colors-window-outline-1);
     height: 55px;
+    width: 200px;
     border-radius: 15px;
+    position: absolute;
+    margin-left: 44%;
+    margin-top: 1%;
 }
 
 /* BUTTONS */
@@ -19,7 +23,6 @@ Button
     -unity-text-align: middle-center;
     padding: 12px;
     margin-top: 11px;
-    width: 50%;
     display: flex;
     max-width: 200px;
 }
@@ -41,4 +44,9 @@ Button:active
 .wui-toolbar__button_selected
 {
     color: var(--wui-colors-window-red-1);
+}
+
+.wui-toolbar__button_margined
+{
+    margin-left: 17%;
 }

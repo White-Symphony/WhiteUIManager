@@ -4,6 +4,7 @@ using WUI.Editor.Enumerations;
 
 namespace WUI.Runtime.ScriptableObjects
 {
+    [System.Serializable]
     public class WUI_UI_SO : ScriptableObject
     {
         public string ID { get; set; }
@@ -30,6 +31,7 @@ namespace WUI.Runtime.ScriptableObjects
             string id = "",
             string uiName = "",
             string uiInformation = "",
+            Vector2 position = default,
             WUI_UISaveData previousUI = null,
             WUI_UISaveData nextUI = null,
             WUI_NodeType nodeType = WUI_NodeType.BasicUI,
@@ -42,6 +44,8 @@ namespace WUI.Runtime.ScriptableObjects
             UIName = uiName;
 
             UIInformation = uiInformation;
+
+            Position = position;
 
             PreviousUI = previousUI;
 

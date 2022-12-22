@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using WUI.Utilities;
 
 namespace WUI.Editor.Window
 {
@@ -12,58 +12,32 @@ namespace WUI.Editor.Window
     {
         private WUI_GraphView _graphView;
 
-        private Texture2D _firstUIIcon;
-        private Texture2D _MiddleUIIcon;
-        private Texture2D _LastUIIcon;
-        private Texture2D _groupIcon;
-        private Texture2D _timeIcon;
-        
-        public void Initialize(WUI_GraphView graphView)
-        {
-            _graphView = graphView;
+        public void Initialize(WUI_GraphView graphView) => _graphView = graphView;
 
-            _firstUIIcon =
-                AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/WhiteUIManager/ART/Textures/Icons/Black_Home_Icon.png");
-            _MiddleUIIcon =
-                AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/WhiteUIManager/ART/Textures/Icons/Black_Node_Icon.png");
-            _LastUIIcon =
-                AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/WhiteUIManager/ART/Textures/Icons/Black_Node_Icon.png");
-            _groupIcon =
-                AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/WhiteUIManager/ART/Textures/Icons/Black_Group_Icon.png");
-            _timeIcon =
-                AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/WhiteUIManager/ART/Textures/Icons/Black_Time_Icon.png");
-
-        }
-        
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
         {
             var searchTreeEntries = new List<SearchTreeEntry>
             {
                 new SearchTreeGroupEntry(new GUIContent("Create UI")),
                 new SearchTreeGroupEntry(new GUIContent("UI Node"), 1),
-                new (new GUIContent("Home UI", _firstUIIcon))
-                {
-                    level = 2,
-                    userData = WUI_NodeType.HomeUI
-                },
-                new (new GUIContent("Basic UI", _MiddleUIIcon))
+                new (new GUIContent("Basic UI", WUI_EditorUtilities.GetBlackIcon("Node")))
                 {
                     level = 2,
                     userData = WUI_NodeType.BasicUI
                 },
-                new (new GUIContent("Last UI", _LastUIIcon))
+                new (new GUIContent("Last UI", WUI_EditorUtilities.GetBlackIcon("Node")))
                 {
                     level = 2,
                     userData = WUI_NodeType.LastUI
                 },
                 new SearchTreeGroupEntry(new GUIContent("UI Group"), 1),
-                new (new GUIContent("Basic Group", _groupIcon))
+                new (new GUIContent("Basic Group", WUI_EditorUtilities.GetBlackIcon("Group")))
                 {
                     level = 2,
                     userData = new Group()
                 },
                 new SearchTreeGroupEntry(new GUIContent("Time"), 1),
-                new (new GUIContent("Wait Time", _timeIcon))
+                new (new GUIContent("Wait Time", WUI_EditorUtilities.GetBlackIcon("Clock")))
                 {
                     level = 2,
                     userData = WUI_NodeType.WaitTime
@@ -79,13 +53,6 @@ namespace WUI.Editor.Window
             
             switch (SearchTreeEntry.userData)
             {
-                case WUI_NodeType.HomeUI:
-                    var firsUINode = _graphView.CreateNode("Home UI", WUI_NodeType.HomeUI, localMousePosition);
-                    
-                    _graphView.AddElement(firsUINode);
-                    
-                    return true;
-                
                 case WUI_NodeType.BasicUI:
                     var middleUINode = _graphView.CreateNode("Basic UI", WUI_NodeType.BasicUI, localMousePosition);
                     
