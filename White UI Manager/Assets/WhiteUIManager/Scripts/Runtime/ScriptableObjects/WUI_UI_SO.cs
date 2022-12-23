@@ -7,30 +7,25 @@ namespace WUI.Runtime.ScriptableObjects
     [System.Serializable]
     public class WUI_UI_SO : ScriptableObject
     {
-        public string ID { get; set; }
-        public string GroupID { get; set; }
+        [field:SerializeField] public string ID { get; set; }
+        [field:SerializeField] public string GroupID { get; set; }
         
-        public Vector2 Position { get; set; }
+        [field:SerializeField] public Vector2 Position { get; set; }
         
-        public string UIName { get; set; }
+        [field:SerializeField] public string UIName { get; set; }
+
+        [field:SerializeField] public WUI_UISaveData PreviousUI { get; set; }
         
-        public string UIInformation { get; set; }
+        [field:SerializeField] public WUI_UISaveData NextUI { get; set; }
         
-        public WUI_UISaveData PreviousUI { get; set; }
-        
-        public WUI_UISaveData NextUI { get; set; }
-        
-        public WUI_NodeType NodeType { get; set; }
-        
-        
-        
+        [field:SerializeField] public WUI_NodeType NodeType { get; set; }
+
         public bool IsStartingNode { get; set; }
 
         public void Initialize(
             string groupID = "",
             string id = "",
             string uiName = "",
-            string uiInformation = "",
             Vector2 position = default,
             WUI_UISaveData previousUI = null,
             WUI_UISaveData nextUI = null,
@@ -42,8 +37,6 @@ namespace WUI.Runtime.ScriptableObjects
             ID = id;
 
             UIName = uiName;
-
-            UIInformation = uiInformation;
 
             Position = position;
 

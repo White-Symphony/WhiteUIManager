@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using WUI.Editor.Enumerations;
 using WUI.Editor.Window;
 using WUI.Runtime.ScriptableObjects;
 using WUI.Utilities;
@@ -53,7 +54,7 @@ namespace WUI.Editor.Utilities
         {
             AssetDatabase.AddObjectToAsset(obj, asset);
 
-            AssetDatabase.SaveAssetIfDirty(obj);
+            AssetDatabase.SaveAssets();
         }
 
         public static void AddGroup(WUI_Group group)
@@ -76,6 +77,9 @@ namespace WUI.Editor.Utilities
             }
 
             groupData.Initialize(group.ID, group.title, group.GetPosition().position);
+            
+            SaveAsset(groupData);
+            SaveAsset(graphData);
         }
         
         public static void AddNode(WUI_Node node, Vector2 position)
@@ -105,13 +109,15 @@ namespace WUI.Editor.Utilities
                 groupID,
                 node.ID,
                 node.UIName,
-                node.UIInformation,
                 position,
                 node.PreviousUI,
                 node.NextUI,
                 node.NodeType,
                 node.IsStartingNode());
 
+            SaveAsset(nodeData);
+            SaveAsset(graphData);
+            
             _graphView.AddElement(node);
         }
         
@@ -142,12 +148,14 @@ namespace WUI.Editor.Utilities
                 groupID,
                 node.ID,
                 node.UIName,
-                node.UIInformation,
                 node.GetPosition().position,
                 node.PreviousUI,
                 node.NextUI,
                 node.NodeType,
                 node.IsStartingNode());
+            
+            SaveAsset(nodeData);
+            SaveAsset(graphData);
 
             _graphView.AddElement(node);
         }
@@ -199,14 +207,16 @@ namespace WUI.Editor.Utilities
         
         public static WUI_Graph_SO GetGraphData()
         {
-            return LoadGraphData();
+            var path = AssetDatabase.GetAssetPath(int.Parse(_graphDataInstanceID));
+            
+            return AssetDatabase.LoadAssetAtPath<WUI_Graph_SO>(path);
         }
         
         public static void Load(string instanceID)
         {
             _graphDataInstanceID = instanceID;
             
-            var graphData = LoadGraphData();
+            var graphData = GetGraphData();
 
             if (graphData == null) return;
             
@@ -217,6 +227,8 @@ namespace WUI.Editor.Utilities
             LoadGroups(graphData.Groups);
             LoadNodes(graphData.Nodes);
             LoadNodesConnections();
+
+            WUI_EditorWindow.GetGraphView().SetViewPositionToObjectCenter(Vector3.zero);
         }
 
         private static void LoadGroups(List<WUI_Group_SO> groups)
@@ -240,7 +252,11 @@ namespace WUI.Editor.Utilities
 
         private static void LoadNodes(List<WUI_UI_SO> nodes)
         {
-            if (nodes.Count < 1) return;
+            if (nodes.Count < 1)
+            {
+                _graphView.CreateNode("Home UI", WUI_NodeType.HomeUI, Vector2.zero);
+                return;
+            }
             
             foreach (var nodeData in nodes)
             {
@@ -316,20 +332,27 @@ namespace WUI.Editor.Utilities
         {
             var groupData = GetGroupByID(groupID);
 
-            if (!GetGraphData().RemoveGroup(groupID)) return;
+            var graphData = GetGraphData();
+            
+            if (!graphData.RemoveGroup(groupID)) return;
             
             AssetDatabase.RemoveObjectFromAsset(groupData);
             SaveAsset(groupData);
+            SaveAsset(graphData);
         }
         
         public static void RemoveNodeByID(string nodeID)
         {
             var nodeData = GetNodeByID(nodeID);
+
+            var graphData = GetGraphData();
             
-            if (!GetGraphData().RemoveNode(nodeID)) return;
+            if (!graphData.RemoveNode(nodeID)) return;
             
             AssetDatabase.RemoveObjectFromAsset(nodeData);
+            
             SaveAsset(nodeData);
+            SaveAsset(graphData);
         }
 
         #endregion
@@ -425,7 +448,7 @@ namespace WUI.Editor.Utilities
                 nextUI.Text = _createUIs[node.ID].NextUI.Text;
                 nextUI.NodeID = _createUIs[node.ID].NextUI.NodeID;
                 
-                SaveAsset(ui);
+                DirtyAsset(ui);
             }
         }
         
@@ -534,13 +557,6 @@ namespace WUI.Editor.Utilities
             return asset;
         }
 
-        private static WUI_Graph_SO LoadGraphData()
-        {
-            var path = AssetDatabase.GetAssetPath(int.Parse(_graphDataInstanceID));
-            
-            return AssetDatabase.LoadAssetAtPath<WUI_Graph_SO>(path);
-        }
-        
         private static T LoadAsset<T>(string path, string assetName) where T : ScriptableObject
         {
             var fullPath = $"{path}/{assetName}.asset";
@@ -552,13 +568,14 @@ namespace WUI.Editor.Utilities
         {
             AssetDatabase.DeleteAsset($"{path}/{assetName}.asset");
         }
+
+        public static void DirtyAsset(Object asset) => EditorUtility.SetDirty(asset);
         
         public static void SaveAsset(Object asset)
         {
             EditorUtility.SetDirty(asset);
             
             AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
         }
 
         #endregion

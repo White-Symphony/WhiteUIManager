@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEditor.Experimental.GraphView;
+﻿using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using WUI.Utilities;
@@ -12,12 +11,14 @@ namespace WUI.Editor.Elements
     
     public class WUI_HomeUI_Node: WUI_Node
     {
+        public override bool IsMovable() => false;
+        
         public override void Draw()
         {
             NodeType = WUI_NodeType.HomeUI;
             
             base.Draw();
-
+            
             AddUIInfo();
             AddOpenButton();
         }

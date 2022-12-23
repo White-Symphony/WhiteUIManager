@@ -107,7 +107,7 @@ namespace WUI.Editor.Elements
                     nodeData.UIName = UIName;
                     nodeData.name = UIName;
                 
-                    WUI_IOUtility.SaveAsset(nodeData);
+                    WUI_IOUtility.DirtyAsset(nodeData);
                     
                     _graphView.AddUngroupedNode(this);
 
@@ -123,7 +123,7 @@ namespace WUI.Editor.Elements
                 nodeData.UIName = UIName;
                 nodeData.name = UIName;
                 
-                WUI_IOUtility.SaveAsset(nodeData);
+                WUI_IOUtility.DirtyAsset(nodeData);
 
                 _graphView.AddGroupedNode(this, currentGroup);
             });

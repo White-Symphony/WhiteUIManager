@@ -1,7 +1,5 @@
 ﻿using System.IO;
-using UnityEditor;
 using UnityEditor.UIElements;
-using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace WUI.Editor.Window
@@ -9,7 +7,7 @@ namespace WUI.Editor.Window
     using Graph;
     using Utilities;
     
-    public class WUI_Toolbar : MonoBehaviour
+    public class WUI_Toolbar
     {
         private static WUI_GraphView _graphView;
         

@@ -27,16 +27,6 @@ namespace WUI.Runtime.ScriptableObjects
 
             #endregion
 
-            #region If UI
-
-            if (_uiData.NodeType is WUI_NodeType.BasicUI or WUI_NodeType.HomeUI or WUI_NodeType.LastUI)
-            {
-                WUI_EditorUtilities.TextField("UI Information", _uiData.UIInformation, out var newUIInformation);
-                _uiData.UIInformation = newUIInformation;
-            }
-
-            #endregion
-
             #region If Wait Time
 
             if (_uiData.NodeType is WUI_NodeType.WaitTime)

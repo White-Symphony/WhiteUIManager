@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEditor.Experimental.GraphView;
+﻿using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using WUI.Utilities;
@@ -17,7 +16,7 @@ namespace WUI.Editor.Elements
             NodeType = WUI_NodeType.BasicUI;
             
             base.Draw();
-
+            
             AddUIInfo();
             AddOpenButton();
         }

@@ -1,5 +1,4 @@
-﻿using UnityEditor;
-using UnityEditor.Experimental.GraphView;
+﻿using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -62,7 +61,7 @@ namespace WUI.Editor.Elements
         {
             var textField = new FloatField(5);
 
-            inputContainer.Add(textField);
+            outputContainer.Add(textField);
         }
 
         #endregion

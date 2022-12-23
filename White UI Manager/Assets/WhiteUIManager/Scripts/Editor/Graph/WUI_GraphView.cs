@@ -118,31 +118,13 @@ namespace WUI.Editor.Graph
 
         private void AddManipulators()
         {
-            #region Menu Manipulators
-
-            _manipulator.AddManipulator(this, CreateNodeContextualMenu("Add First UI", WUI_NodeType.HomeUI));
-            _manipulator.AddManipulator(this, CreateNodeContextualMenu("Add Middle UI", WUI_NodeType.BasicUI));
-            _manipulator.AddManipulator(this, CreateNodeContextualMenu("Add Last UI", WUI_NodeType.LastUI));
-            
-            _manipulator.AddManipulator(this, CreateGroupContextualMenu());
-
-            #endregion
-            
             _manipulator.SetManipulator(this);
         }
 
-        private IManipulator CreateNodeContextualMenu(string actionTitle, WUI_NodeType nodeType)
+        private IManipulator CreateNodeContextualMenu(string actionTitle, Action<DropdownMenuAction> action)
         {
             var contextualMenuManipulator = new ContextualMenuManipulator(
-                menuEvent => menuEvent.menu.AppendAction(actionTitle, actionEvent => AddElement(CreateNode(nodeType.ToString(), nodeType, GetLocalMousePosition(actionEvent.eventInfo.localMousePosition)))));
-
-            return contextualMenuManipulator;
-        }
-
-        private IManipulator CreateGroupContextualMenu()
-        {
-            var contextualMenuManipulator = new ContextualMenuManipulator(
-                menuEvent => menuEvent.menu.AppendAction("Add Group", actionEvent => CreateGroup("UI Group", GetLocalMousePosition(actionEvent.eventInfo.mousePosition))));
+                menuEvent => menuEvent.menu.AppendAction(actionTitle, actionEvent => action?.Invoke(actionEvent)));
 
             return contextualMenuManipulator;
         }
@@ -357,7 +339,7 @@ namespace WUI.Editor.Graph
                 groupData.Name = wui_group.title;
                 groupData.name = wui_group.title;
                 
-                AssetDatabase.SaveAssets();
+                WUI_IOUtility.DirtyAsset(groupData);
                 
                 if (string.IsNullOrEmpty(wui_group.title))
                 {
@@ -408,6 +390,8 @@ namespace WUI.Editor.Graph
 
                                 groupData.Position = group.GetPosition().position;
 
+                                WUI_IOUtility.DirtyAsset(groupData);
+                                
                                 foreach (var node in nodes.Select(n => n as WUI_Node))
                                 {
                                     if (node == null) continue;
@@ -417,6 +401,8 @@ namespace WUI.Editor.Graph
                                     if (nodeData == null) continue;
 
                                     nodeData.Position = node.GetPosition().position;
+                                    
+                                    WUI_IOUtility.DirtyAsset(nodeData);
                                 }
                                 
                                 break;
@@ -625,7 +611,10 @@ namespace WUI.Editor.Graph
 
             node.Group = null;
 
-            WUI_IOUtility.GetNodeByID(node.ID).GroupID = "";
+            var nodeData = WUI_IOUtility.GetNodeByID(node.ID);
+            nodeData.GroupID = "";
+            
+            WUI_IOUtility.DirtyAsset(nodeData);
             
             var groupedNodesList = _groupedNodes[group][nodeName].Nodes;
             
@@ -726,6 +715,13 @@ namespace WUI.Editor.Graph
             var localMousePosition = contentViewContainer.WorldToLocal(worldMousePosition);
 
             return localMousePosition;
+        }
+
+        public void SetViewPositionToObjectCenter(Vector3 position)
+        {
+            var windowCenter = new Vector3(_editorWindow.position.width / 2, _editorWindow.position.height / 2);
+
+            viewTransform.position = position + windowCenter;
         }
 
         public void ClearGraph()
