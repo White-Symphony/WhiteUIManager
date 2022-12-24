@@ -1,4 +1,6 @@
-﻿using UnityEditor.Experimental.GraphView;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
+using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -12,11 +14,17 @@ namespace WUI.Editor.Elements
     
     public class WUI_WaitTime_Node : WUI_Node
     {
+        public float WaitTime;
+
+        private Label timeLabel;
+        
         public override void Draw()
         {
             NodeType = WUI_NodeType.WaitTime;
 
             AddFloatField();
+
+            AddTimeLabel();
 
             base.Draw();
         }
@@ -35,12 +43,19 @@ namespace WUI.Editor.Elements
         {
             base.Initialize(nodeName, graphView, nodeType, position);
 
-            NextUI = new WUI_UISaveData();
+            NextNodes = new List<WUI_NodeData>{new ()};
 
-            PreviousUI = new WUI_UISaveData();
+            PreviousNodes = new List<WUI_NodeData>{new ()};
 
-            AddInput("", PreviousUI, Port.Capacity.Multi);
-            AddOutput("", NextUI, Port.Capacity.Multi);
+            foreach (var previousNode in PreviousNodes)
+            {
+                AddInput("", previousNode);   
+            }
+
+            foreach (var nextNode in NextNodes)
+            {
+                AddOutput("", nextNode);
+            }
         }
 
         #region Override Methods
@@ -57,11 +72,42 @@ namespace WUI.Editor.Elements
 
         #region Extension
 
+        private void AddTimeLabel()
+        {
+            timeLabel = new Label($"Wait {WaitTime}\nSecond")
+            {
+                style =
+                {
+                    marginTop = 5,
+                    position = Position.Absolute
+                }
+            };
+
+            outputContainer.Add(timeLabel);
+        }
+        
         private void AddFloatField()
         {
-            var textField = new FloatField(5);
+            var textField = new FloatField(2)
+            {
+                style =
+                {
+                    paddingTop = 6,
+                    paddingLeft = 6,
+                    width = 32,
+                    position = Position.Absolute,
+        
+                    left = 15
+                }
+            };
 
-            outputContainer.Add(textField);
+            textField.RegisterValueChangedCallback(@event =>
+            {
+                WaitTime = @event.newValue;
+                timeLabel.text = $"Wait {WaitTime}\nSecond";
+            });
+
+            inputContainer.Add(textField);
         }
 
         #endregion

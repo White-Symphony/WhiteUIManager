@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using WUI.Editor.Data.Save;
 using WUI.Editor.Enumerations;
@@ -5,18 +6,19 @@ using WUI.Editor.Enumerations;
 namespace WUI.Runtime.ScriptableObjects
 {
     [System.Serializable]
-    public class WUI_UI_SO : ScriptableObject
+    public class WUI_Node_SO : ScriptableObject
     {
         [field:SerializeField] public string ID { get; set; }
+        
         [field:SerializeField] public string GroupID { get; set; }
         
         [field:SerializeField] public Vector2 Position { get; set; }
         
-        [field:SerializeField] public string UIName { get; set; }
+        [field:SerializeField] public string NodeName { get; set; }
 
-        [field:SerializeField] public WUI_UISaveData PreviousUI { get; set; }
+        [field:SerializeField] public List<WUI_NodeData> PreviousNodes { get; set; }
         
-        [field:SerializeField] public WUI_UISaveData NextUI { get; set; }
+        [field:SerializeField] public List<WUI_NodeData> NextNodes { get; set; }
         
         [field:SerializeField] public WUI_NodeType NodeType { get; set; }
 
@@ -27,8 +29,8 @@ namespace WUI.Runtime.ScriptableObjects
             string id = "",
             string uiName = "",
             Vector2 position = default,
-            WUI_UISaveData previousUI = null,
-            WUI_UISaveData nextUI = null,
+            List<WUI_NodeData> previousNodes = null,
+            List<WUI_NodeData> nextNodes = null,
             WUI_NodeType nodeType = WUI_NodeType.BasicUI,
             bool isStartingNode = false)
         {
@@ -36,13 +38,13 @@ namespace WUI.Runtime.ScriptableObjects
 
             ID = id;
 
-            UIName = uiName;
+            NodeName = uiName;
 
             Position = position;
 
-            PreviousUI = previousUI;
+            PreviousNodes = previousNodes;
 
-            NextUI = nextUI;
+            NextNodes = nextNodes;
 
             NodeType = nodeType;
 

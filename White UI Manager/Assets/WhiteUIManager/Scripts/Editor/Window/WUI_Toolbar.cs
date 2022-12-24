@@ -49,7 +49,7 @@ namespace WUI.Editor.Window
             
             Clear();
 
-            WUI_IOUtility.Initialize(_graphView, _fileName);
+            WUI_IOUtility.Initialize(_graphView);
             WUI_IOUtility.Load(instanceID);
         }
 

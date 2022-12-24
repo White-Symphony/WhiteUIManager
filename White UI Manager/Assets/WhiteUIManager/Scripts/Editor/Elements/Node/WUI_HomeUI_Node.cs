@@ -1,4 +1,5 @@
-﻿using UnityEditor.Experimental.GraphView;
+﻿using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using WUI.Utilities;
@@ -12,7 +13,9 @@ namespace WUI.Editor.Elements
     public class WUI_HomeUI_Node: WUI_Node
     {
         public override bool IsMovable() => false;
-        
+
+        public override bool IsSelectable() => false;
+
         public override void Draw()
         {
             NodeType = WUI_NodeType.HomeUI;
@@ -37,9 +40,12 @@ namespace WUI.Editor.Elements
         {
             base.Initialize(nodeName, graphView, nodeType, position);
 
-            NextUI = new WUI_UISaveData();
+            NextNodes = new List<WUI_NodeData>{new ()};
 
-            AddOutput("", NextUI, Port.Capacity.Multi);
+            foreach (var nextNode in NextNodes)
+            {
+                AddOutput("", nextNode);
+            }
         }
 
         #region Override Methods

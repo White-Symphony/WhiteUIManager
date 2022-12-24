@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -176,19 +175,19 @@ namespace WUI.Editor.Graph
             return group;
         }
 
-        public Node AddNode(WUI_UI_SO uiSO)
+        public Node AddNode(WUI_Node_SO nodeSo)
         {
-            var type = Type.GetType($"WUI.Editor.Elements.WUI_{uiSO.NodeType}_Node");
+            var type = Type.GetType($"WUI.Editor.Elements.WUI_{nodeSo.NodeType}_Node");
 
             if (type == null) return null;
 
-            var nodeData = WUI_IOUtility.GetNodeByID(uiSO.ID);
+            var nodeData = WUI_IOUtility.GetNodeByID(nodeSo.ID);
 
             if (nodeData == null) return null;
             
             if (Activator.CreateInstance(type) is not WUI_Node node) return null;
 
-            node.Initialize(nodeData.UIName, this, uiSO.NodeType, nodeData.Position);
+            node.Initialize(nodeData.NodeName, this, nodeSo.NodeType, nodeData.Position);
 
             AddUngroupedNode(node);
             
@@ -417,16 +416,16 @@ namespace WUI.Editor.Graph
                         var previousNode = edge.output.node as WUI_Node;
                         var nextNode = edge.input.node as WUI_Node;
 
-                        if (edge.input.userData is WUI_UISaveData nextNodeData)
+                        if (edge.input.userData is WUI_NodeData nextNodeData)
                         {
                             nextNodeData.NodeID = previousNode?.ID;
-                            nextNodeData.Text = previousNode?.UIName;
+                            nextNodeData.NodeName = previousNode?.UIName;
                         }
 
-                        if ( edge.output.userData is WUI_UISaveData previousNodeData)
+                        if ( edge.output.userData is WUI_NodeData previousNodeData)
                         {
                             previousNodeData.NodeID = nextNode?.ID;
-                            previousNodeData.Text = nextNode?.UIName;
+                            previousNodeData.NodeName = nextNode?.UIName;
                         }
                     }
                 }
@@ -437,15 +436,15 @@ namespace WUI.Editor.Graph
                     {
                         if(element is not Edge edge) continue;
 
-                        if (edge.output.userData is WUI_UISaveData outputUIData)
+                        if (edge.output.userData is WUI_NodeData outputUIData)
                         {
-                            outputUIData.Text = "";
+                            outputUIData.NodeName = "";
                             outputUIData.NodeID = "";
                         }
                         
-                        if (edge.input.userData is WUI_UISaveData inputUIData)
+                        if (edge.input.userData is WUI_NodeData inputUIData)
                         {
-                            inputUIData.Text = "";
+                            inputUIData.NodeName = "";
                             inputUIData.NodeID = "";   
                         }
                     }

@@ -74,7 +74,7 @@ namespace WUI.Editor.Window
                     return true;
                 
                 case Group:
-                    _graphView.CreateGroup("UI Group", localMousePosition);
+                    _graphView.CreateGroup("Node Group", localMousePosition);
                     
                     return true;
                 

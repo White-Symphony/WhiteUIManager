@@ -1,4 +1,5 @@
-﻿using UnityEditor.Experimental.GraphView;
+﻿using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using WUI.Utilities;
@@ -35,12 +36,19 @@ namespace WUI.Editor.Elements
         {
             base.Initialize(nodeName, graphView, nodeType, position);
 
-            NextUI = new WUI_UISaveData();
+            NextNodes = new List<WUI_NodeData>{new ()};
 
-            PreviousUI = new WUI_UISaveData();
+            PreviousNodes = new List<WUI_NodeData>{new ()};
+            
+            foreach (var nextNode in NextNodes)
+            {
+                AddOutput("", nextNode);
+            }
 
-            AddInput("", PreviousUI, Port.Capacity.Multi);
-            AddOutput("", NextUI, Port.Capacity.Multi);
+            foreach (var previousNode in PreviousNodes)
+            {
+                AddInput("", previousNode);   
+            }
         }
 
         #region Override Methods

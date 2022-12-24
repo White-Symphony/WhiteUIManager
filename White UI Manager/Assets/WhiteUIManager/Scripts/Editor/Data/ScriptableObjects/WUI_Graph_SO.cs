@@ -21,7 +21,7 @@ namespace WUI.Editor.Data.ScriptableObjects
         
         [field:SerializeField] public List<WUI_Group_SO> Groups { get; set; }
         
-        [field:SerializeField] public List<WUI_UI_SO> Nodes { get; set; }
+        [field:SerializeField] public List<WUI_Node_SO> Nodes { get; set; }
         
         [field:SerializeField] public List<string> OldGroupNames { get; set; }
         
@@ -58,7 +58,7 @@ namespace WUI.Editor.Data.ScriptableObjects
             FileName = fileName;
             
             Groups ??= new List<WUI_Group_SO>();
-            Nodes ??= new List<WUI_UI_SO>();
+            Nodes ??= new List<WUI_Node_SO>();
         }
 
         [OnOpenAsset]

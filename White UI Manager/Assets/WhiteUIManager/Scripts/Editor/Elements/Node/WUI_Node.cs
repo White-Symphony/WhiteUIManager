@@ -21,9 +21,9 @@ namespace WUI.Editor.Elements
 
         public string UIInformation { get; protected set; }
 
-        public WUI_UISaveData PreviousUI { get; set; }
+        public List<WUI_NodeData> PreviousNodes { get; set; }
         
-        public WUI_UISaveData NextUI { get; set; }
+        public List<WUI_NodeData> NextNodes { get; set; }
         
         public WUI_NodeType NodeType { get; protected set; }
         
@@ -43,9 +43,6 @@ namespace WUI.Editor.Elements
             
             _graphView = graphView;
 
-            PreviousUI = new WUI_UISaveData();
-            NextUI = new WUI_UISaveData();
-            
             NodeType = nodeType;
             UIName = nodeName;
 
@@ -68,7 +65,7 @@ namespace WUI.Editor.Elements
         
         public virtual void Draw()
         {
-            #region TITLE
+            #region Title
 
             SetIcon();
             
@@ -78,8 +75,8 @@ namespace WUI.Editor.Elements
 
                 textField.value = callback.newValue.RemoveWhitespaces().RemoveSpecialCharacters();
 
-                if (userData is WUI_UISaveData saveData)
-                    saveData.Text = textField.value;
+                if (userData is WUI_NodeData saveData)
+                    saveData.NodeName = textField.value;
 
                 if (string.IsNullOrEmpty(textField.value))
                 {
@@ -104,11 +101,12 @@ namespace WUI.Editor.Elements
 
                     UIName = textField.value;
 
-                    nodeData.UIName = UIName;
-                    nodeData.name = UIName;
-                
+                    nodeData.NodeName = UIName;
+
                     WUI_IOUtility.DirtyAsset(nodeData);
                     
+                    WUI_IOUtility.UpdateNodeConnection(nodeData);
+
                     _graphView.AddUngroupedNode(this);
 
                     return;
@@ -120,10 +118,11 @@ namespace WUI.Editor.Elements
 
                 UIName = textField.value;
 
-                nodeData.UIName = UIName;
-                nodeData.name = UIName;
-                
+                nodeData.NodeName = UIName;
+
                 WUI_IOUtility.DirtyAsset(nodeData);
+                
+                WUI_IOUtility.UpdateNodeConnection(nodeData);
 
                 _graphView.AddGroupedNode(this, currentGroup);
             });
@@ -153,6 +152,8 @@ namespace WUI.Editor.Elements
 
             RefreshExpandedState();
         }
+
+        #region Extensions
 
         protected virtual void SetIcon()
         {
@@ -200,7 +201,11 @@ namespace WUI.Editor.Elements
             
             RefreshExpandedState();
         }
-        
+
+        #endregion
+
+        #region Ports
+
         public void AddInput(string inputName, object ui_userData, Port.Capacity capacity = Port.Capacity.Single)
         {
             this.CreatePort(
@@ -236,6 +241,8 @@ namespace WUI.Editor.Elements
 
             RefreshExpandedState();
         }
+
+        #endregion
 
         #region Utility Methods
 

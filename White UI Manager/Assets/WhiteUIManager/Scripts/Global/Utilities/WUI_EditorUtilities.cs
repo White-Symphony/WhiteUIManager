@@ -63,6 +63,25 @@ namespace WUI.Utilities
 
         #region Field Methods
 
+        public static void TextsField(string field, params string[] inTexts)
+        {
+            Begin_V(Styles.HelpBox);
+            
+            EditorGUILayout.LabelField(field, Styles.LabelStyle);
+            
+            EditorGUILayout.Space(10);
+
+            foreach (var inText in inTexts)
+            {
+                EditorGUILayout.TextField(inText, Styles.Field);   
+                EditorGUILayout.Space(10);
+            }
+
+            EditorGUILayout.Space(10);
+
+            End_V();
+        }
+        
         public static void TextField(string field, string inText, out string outText)
         {
             outText = inText;
