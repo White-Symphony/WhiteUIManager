@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using WUI.Editor.Data.ScriptableObjects;
 using WUI.Runtime.ScriptableObjects;
 using WUI.Utilities;
 
@@ -90,7 +92,7 @@ namespace WUI.Editor.Graph
         {
             _editorWindow.GetToolbar().LoadToInputPath(filePath, instanceID);
         }
-        
+
         #region Override Methods
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -104,7 +106,7 @@ namespace WUI.Editor.Graph
                 if (startPort.node == p.node) return;
 
                 if (startPort.direction == p.direction) return;
-                
+
                 compatiblePorts.Add(p);
             });
 
@@ -187,7 +189,7 @@ namespace WUI.Editor.Graph
             
             if (Activator.CreateInstance(type) is not WUI_Node node) return null;
 
-            node.Initialize(nodeData.NodeName, this, nodeSo.NodeType, nodeData.Position);
+            node.Initialize(nodeData, this, nodeSo.NodeType);
 
             AddUngroupedNode(node);
             
@@ -408,7 +410,7 @@ namespace WUI.Editor.Graph
                         }
                     }
                 }
-                
+
                 if (changes.edgesToCreate != null)
                 {
                     foreach (var edge in changes.edgesToCreate)
@@ -427,6 +429,10 @@ namespace WUI.Editor.Graph
                             previousNodeData.NodeID = nextNode?.ID;
                             previousNodeData.NodeName = nextNode?.UIName;
                         }
+
+                        var whiteEdge = edge as WUI_Edge;
+
+                        whiteEdge?.EdgeCheckConnection();
                     }
                 }
 

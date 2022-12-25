@@ -1,5 +1,7 @@
+using System.Linq;
 using UnityEditor;
 using UnityEngine.UIElements;
+using WUI.Editor.Elements;
 using WUI.Editor.Graph;
 
 namespace WUI.Editor.Window
@@ -11,11 +13,15 @@ namespace WUI.Editor.Window
         private static WUI_GraphView _graphView;
 
         private static WUI_Toolbar _toolbar;
-
-        [MenuItem("WhiteUI/White UI Editor")]
+        
         public static void OpenWindow()
         {
             GetWindow<WUI_EditorWindow>("White UI Editor");
+        }
+
+        private void Update()
+        {
+            UpdateEdgeFlow();
         }
 
         public static WUI_GraphView GetGraphView() => _graphView;
@@ -31,6 +37,30 @@ namespace WUI.Editor.Window
             AddStyles();
         }
 
+        #region Edge
+
+        private void UpdateEdgeFlow()
+        {
+            if (!EditorApplication.isPlaying)
+            {
+                foreach (var edge in _graphView.edges.Select(e => e as WUI_Edge))
+                {
+                    if (edge == null) continue;
+
+                    edge.enableFlow = false;
+                }
+                
+                return;
+            }
+            
+            foreach (var edge in _graphView.edges.Select(e => e as WUI_Edge))
+            {
+                edge?.UpdateFlow();
+            }
+        }
+
+        #endregion
+        
         #region Element Addition
 
         private void AddGraphView()

@@ -31,20 +31,20 @@ namespace WUI.Editor.Elements
             
             base.SetIcon();
         }
+
+        #region Override Methods
         
         public override void Initialize(string nodeName, WUI_GraphView graphView, WUI_NodeType nodeType, Vector2 position)
         {
             base.Initialize(nodeName, graphView, nodeType, position);
-
-            PreviousNodes = new List<WUI_NodeData>{new ()};
-
+            
+            PreviousNodes = new List<WUI_NodeData> { new() };
+            
             foreach (var previousNode in PreviousNodes)
             {
-                AddInput("", previousNode);   
+                AddInput("", previousNode);
             }
         }
-
-        #region Override Methods
 
         public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
         {

@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 using WUI.Editor.Data.Save;
 using WUI.Editor.Graph;
 using WUI.Editor.Manipulator;
+using WUI.Runtime.ScriptableObjects;
 using WUI.Utilities;
 
 namespace WUI.Editor.Elements
@@ -35,6 +37,33 @@ namespace WUI.Editor.Elements
         
         private Color _defaultBackgroundColor;
 
+        public virtual void Initialize(WUI_Node_SO nodeData, WUI_GraphView graphView, WUI_NodeType nodeType)
+        {
+            AddManipulators();
+            
+            ID = Guid.NewGuid().ToString();
+            
+            _graphView = graphView;
+
+            NodeType = nodeType;
+            UIName = nodeData.NodeName;
+
+            NextNodes = nodeData.NextNodes?.ToList();
+            PreviousNodes = nodeData.PreviousNodes?.ToList();
+
+            _defaultBackgroundColor = new Color(29f / 255f, 29f / 255f, 30f / 255f, .3f);
+            
+            ResetStyle();
+            
+            SetPosition(new Rect(nodeData.Position, Vector2.one));
+
+            mainContainer.AddClasses("wui-node_main-container");
+            extensionContainer.AddClasses("wui-node__extension-container");
+            
+            if(PreviousNodes != null) foreach (var previousNode in PreviousNodes) AddInput("", previousNode);
+            if(NextNodes != null) foreach (var nextNode in NextNodes) AddOutput("", nextNode);   
+        }
+        
         public virtual void Initialize(string nodeName, WUI_GraphView graphView, WUI_NodeType nodeType, Vector2 position)
         {
             AddManipulators();
@@ -206,6 +235,11 @@ namespace WUI.Editor.Elements
 
         #region Ports
 
+        public new WUI_Port InstantiatePort(Orientation orientation, Direction direction, Port.Capacity capacity, Type type)
+        {
+            return WUI_Port.Create<WUI_Edge>(orientation, direction, capacity, type);
+        }
+
         public void AddInput(string inputName, object ui_userData, Port.Capacity capacity = Port.Capacity.Single)
         {
             this.CreatePort(
@@ -240,6 +274,34 @@ namespace WUI.Editor.Elements
             outputContainer.Add(port);
 
             RefreshExpandedState();
+        }
+
+        public bool RemoveLastInput()
+        {
+            if (inputContainer.Children().Last() is not Port port) return false;
+
+            if (port.connected) return false;
+
+            PreviousNodes.Remove(PreviousNodes[^1]);
+            inputContainer.Remove(port);
+            
+            RefreshExpandedState();
+
+            return true;
+        }
+
+        public bool RemoveLastOutput()
+        {
+            if (outputContainer.Children().Last() is not Port port) return false;
+            
+            if (port.connected) return false;
+
+            NextNodes.Remove(NextNodes[^1]);
+            outputContainer.Remove(port);
+            
+            RefreshExpandedState();
+
+            return true;
         }
 
         #endregion

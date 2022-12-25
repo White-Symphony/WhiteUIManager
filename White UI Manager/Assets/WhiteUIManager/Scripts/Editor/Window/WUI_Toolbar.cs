@@ -1,6 +1,8 @@
 ﻿using System.IO;
+using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
+using WUI.Editor.Data.ScriptableObjects;
 
 namespace WUI.Editor.Window
 {

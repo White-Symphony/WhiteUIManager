@@ -30,6 +30,8 @@ namespace WUI.Editor.Data.ScriptableObjects
         [field:SerializeField] public WUI_SerializableDictionary<string, List<string>> OldGroupedNames { get; set; }
 
         private static int myInstanceID;
+
+        private WUI_Graph_SO savedGraph;
         
         public bool RemoveGroup(string groupID)
         {
@@ -75,22 +77,15 @@ namespace WUI.Editor.Data.ScriptableObjects
             return true;
         }
         
-        private void Awake()
+        private void Awake() 
         {
             EditorApplication.projectChanged += SetFileName;
-            CompilationPipeline.compilationFinished += LoadNode;
         }
-        
-        private void LoadNode(object obj)
-        {
-            WUI_EditorWindow.GetGraphView().LoadData(AssetDatabase.GetAssetPath(myInstanceID), myInstanceID.ToString());
-        } 
 
         private void OnDestroy()
         {
             EditorApplication.projectChanged -= SetFileName;
-            CompilationPipeline.compilationFinished -= LoadNode;
-            
+
             WUI_EditorWindow.GetGraphView().ClearGraph();
         }
 

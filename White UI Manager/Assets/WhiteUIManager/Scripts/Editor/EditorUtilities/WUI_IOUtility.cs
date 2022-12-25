@@ -113,6 +113,21 @@ namespace WUI.Editor.Utilities
         #endregion
 
         #region Load Methods
+
+        public static void Load(WUI_Graph_SO graphData)
+        {
+            if (graphData == null) return;
+            
+            graphData.Initialize(graphData.FileName);
+
+            WUI_Toolbar.UpdateFileName(graphData.FileName);
+
+            LoadGroups(graphData.Groups);
+            LoadNodes(graphData.Nodes);
+            LoadNodesConnections();
+
+            WUI_EditorWindow.GetGraphView().SetViewPositionToObjectCenter(Vector3.zero);
+        }
         
         public static void Load(string instanceID)
         {
@@ -304,28 +319,36 @@ namespace WUI.Editor.Utilities
             
             foreach (var node in _nodes)
             {
-                var nextPorts = node.Value.outputContainer.Children().Select(n => n as Port).ToList();
-                var nextNodesData = node.Value.NextNodes;
+                var currentNode = node.Value;
+                
+                var outputPorts = currentNode.outputContainer.Children().Select(n => n as WUI_Port).ToList();
+                var nextNodesData =currentNode.NextNodes;
 
-                for (var i = 0; i < nextPorts.Count; i++)
+                for (var i = 0; i < outputPorts.Count; i++)
                 {
-                    var nextPort = nextPorts[i];
+                    var outputPort = outputPorts[i];
                     var nextNodeData = nextNodesData[i];
 
-                    if (nextNodeData == null || nextPort == null) continue;
+                    if (nextNodeData == null || outputPort == null) continue;
                     
-                    if(nextPort.connected) continue;
+                    if(outputPort.connected) continue;
 
                     if (string.IsNullOrEmpty(nextNodeData.NodeID)) continue;
 
                     var nextNode = _nodes[nextNodeData.NodeID];
 
-                    var index = nextNode.PreviousNodes.FindIndex(n => n.NodeID == node.Value.ID);
+                    var index = nextNode.PreviousNodes.FindIndex(n => n.NodeID == currentNode.ID);
+                    
+                    if(index < 0) continue;
 
                     var nexttPort = nextNode.inputContainer[index];
 
-                    var edge = nextPort.ConnectTo(nexttPort as Port);
+                    var edge = outputPort.ConnectTo(nexttPort as WUI_Port);
+
+                    if (edge == null) continue;
                     
+                    edge.enableFlow = true;
+
                     _graphView.AddElement(edge);
                 }
 
