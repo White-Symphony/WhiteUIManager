@@ -21,7 +21,54 @@ namespace WUI.Editor.Elements
           var draggedPort = edgeConnector.edgeDragHelper.draggedPort;
           
           if(draggedPort != this) return;
+
+          switch (draggedPort.direction)
+          {
+            case Direction.Input: AddOutputs(draggedPort); break;
+            case Direction.Output: AddInputs(draggedPort); break;
+            default: return;
+          }
+
+          base.OnStartEdgeDragging();
+        }
+        
+        public override void OnStopEdgeDragging()
+        {
+          var draggedPort = edgeConnector.edgeDragHelper.draggedPort;
           
+          if(draggedPort != this) return;
+
+          switch (draggedPort.direction)
+          {
+            case Direction.Input: RemoveOutputs(); break;
+            case Direction.Output: RemoveInputs(); break;
+            default: return;
+          }
+
+          base.OnStopEdgeDragging();
+          
+          edgeConnector.edgeDragHelper.draggedPort = null;
+        }
+
+        public new WUI_Edge ConnectTo(Port other) => ConnectTo<WUI_Edge>(other);
+        
+        public new static WUI_Port Create<TEdge>(
+          Orientation orientation,
+          Direction direction,
+          Capacity capacity,
+          Type type) where TEdge : Edge, new()
+        {
+          var listener = new WUI_DefaultEdgeConnectorListener();
+          var ele = new WUI_Port(orientation, direction, capacity, type)
+          {
+            m_EdgeConnector = new EdgeConnector<TEdge>(listener)
+          };
+          ele.AddManipulator(ele.edgeConnector);
+          return ele;
+        }
+
+        private void AddInputs(Port draggedPort)
+        {
           if (m_GraphView == null || m_GraphView.nodes.ToArray().Length < 1) return;
           
           var nodes = m_GraphView.nodes;
@@ -36,23 +83,34 @@ namespace WUI.Editor.Elements
             {
               if (inputPorts[^1].connected == false) continue;
             }
-
-            nodeData.PreviousNodes.Add(new WUI_NodeData());
-            nodeData.AddInput("", new WUI_NodeData());
-            return;
+            
+            nodeData.AddInputWithData("", new WUI_NodeData());
           }
-          
-          base.OnStartEdgeDragging();
         }
-        
-        public override void OnStopEdgeDragging()
+
+        private void AddOutputs(Port draggedPort)
         {
-          base.OnStopEdgeDragging();
-
-          var draggedPort = edgeConnector.edgeDragHelper.draggedPort;
+          if (m_GraphView == null || m_GraphView.nodes.ToArray().Length < 1) return;
           
-          if(draggedPort != this) return;
+          var nodes = m_GraphView.nodes;
 
+          foreach (var nodeData in nodes.OfType<WUI_Node>().Where(nodeData => nodeData.NodeType != WUI_NodeType.HomeUI))
+          {
+            if (nodeData == draggedPort.node) continue;
+
+            var outputPorts = nodeData.outputContainer.Children().Select(e => e as Port).ToArray();
+            
+            if (nodeData.outputContainer.childCount == 1)
+            {
+              if (outputPorts[^1].connected == false) continue;
+            }
+            
+            nodeData.AddOutputWithData("", new WUI_NodeData());
+          }
+        }
+
+        private void RemoveInputs()
+        {
           if (m_GraphView == null || m_GraphView.nodes.ToArray().Length < 1) return;
           
           var nodes = m_GraphView.nodes.Select(n => n as WUI_Node);
@@ -74,23 +132,29 @@ namespace WUI.Editor.Elements
           }
         }
 
-        public new WUI_Edge ConnectTo(Port other) => ConnectTo<WUI_Edge>(other);
-        
-        public new static WUI_Port Create<TEdge>(
-          Orientation orientation,
-          Direction direction,
-          Capacity capacity,
-          Type type) where TEdge : Edge, new()
+        private void RemoveOutputs()
         {
-          var listener = new WUI_DefaultEdgeConnectorListener();
-          var ele = new WUI_Port(orientation, direction, capacity, type)
-          {
-            m_EdgeConnector = new EdgeConnector<TEdge>(listener)
-          };
-          ele.AddManipulator(ele.edgeConnector);
-          return ele;
-        }
+          if (m_GraphView == null || m_GraphView.nodes.ToArray().Length < 1) return;
 
+          var nodes = m_GraphView.nodes.Select(n => n as WUI_Node);
+
+          foreach (var n in nodes)
+          {
+            var outputPorts = n?.outputContainer.Children().Select(e => e as Port).ToArray();
+
+            if (outputPorts == null) continue;
+
+            if (outputPorts.Length < 2) continue;
+            
+            for (var i = 1; i < outputPorts.Length; i++)
+            {
+              if (outputPorts[i].connected) continue;
+
+              n.RemoveLastOutput();
+            }
+          }
+        }
+        
         private class WUI_DefaultEdgeConnectorListener : IEdgeConnectorListener
         {
           private readonly GraphViewChange m_GraphViewChange;

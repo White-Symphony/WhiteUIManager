@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using WUI.Editor.Data.ScriptableObjects;
 using WUI.Runtime.ScriptableObjects;
 using WUI.Utilities;
 
@@ -229,11 +227,11 @@ namespace WUI.Editor.Graph
             {
                 var groupType = typeof(WUI_Group);
 
-                var edgeType = typeof(Edge);
+                var edgeType = typeof(WUI_Edge);
                 
                 var groupsToDelete = new List<WUI_Group>();
 
-                var edgesToDelete = new List<Edge>();
+                var edgesToDelete = new List<WUI_Edge>();
                 
                 var nodesToDelete = new List<WUI_Node>();
 
@@ -248,7 +246,7 @@ namespace WUI.Editor.Graph
 
                     if (element.GetType() == edgeType)
                     {
-                        var edge = element as Edge;
+                        var edge = element as WUI_Edge;
                         
                         edgesToDelete.Add(edge);
 
@@ -438,9 +436,9 @@ namespace WUI.Editor.Graph
 
                 if (changes.elementsToRemove != null)
                 {
-                    foreach (var element in changes.elementsToRemove.Where(element => element.GetType() == typeof(Edge)))
+                    foreach (var element in changes.elementsToRemove.Where(element => element.GetType() == typeof(WUI_Edge)))
                     {
-                        if(element is not Edge edge) continue;
+                        if(element is not WUI_Edge edge) continue;
 
                         if (edge.output.userData is WUI_NodeData outputUIData)
                         {

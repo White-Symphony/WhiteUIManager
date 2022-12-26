@@ -53,9 +53,24 @@ namespace WUI.Editor.Window
                 return;
             }
             
-            foreach (var edge in _graphView.edges.Select(e => e as WUI_Edge))
+            foreach (var node in _graphView.nodes.Select(e => e as WUI_Node))
             {
-                edge?.UpdateFlow();
+                if (node == null) continue;
+
+                if(!node.IsStartingNode()) continue;
+                
+                var ports = node.outputContainer.Children().Select(e => e as WUI_Port).ToArray();
+
+                foreach (var port in ports)
+                {
+                    var edges = port.connections.Select(e => e as WUI_Edge);
+                    foreach (var edge in edges)
+                    {
+                        edge?.UpdateFlow();
+                    }
+                }
+
+                if (node.NextNodes == null) continue;
             }
         }
 

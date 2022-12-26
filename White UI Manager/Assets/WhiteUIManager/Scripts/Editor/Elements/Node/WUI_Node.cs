@@ -257,7 +257,16 @@ namespace WUI.Editor.Elements
 
             RefreshExpandedState();
         }
-        
+
+        public void AddInputWithData(string inputName, object ui_userData,
+            Port.Capacity capacity = Port.Capacity.Single)
+        {
+            if (PreviousNodes == null) return;
+            
+            PreviousNodes.Add(new WUI_NodeData());
+            AddInput(inputName, ui_userData, capacity);
+        }
+
         public void AddOutput(string inputName, object ui_userData, Port.Capacity capacity = Port.Capacity.Single)
         {
             this.CreatePort(
@@ -274,6 +283,15 @@ namespace WUI.Editor.Elements
             outputContainer.Add(port);
 
             RefreshExpandedState();
+        }
+
+        public void AddOutputWithData(string inputName, object ui_userData,
+            Port.Capacity capacity = Port.Capacity.Single)
+        {
+            if (NextNodes == null) return;
+            
+            NextNodes.Add(new WUI_NodeData());
+            AddOutput(inputName, ui_userData, capacity);
         }
 
         public bool RemoveLastInput()

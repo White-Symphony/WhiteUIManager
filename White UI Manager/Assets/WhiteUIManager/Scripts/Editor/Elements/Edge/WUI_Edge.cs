@@ -66,7 +66,7 @@ namespace WUI.Editor.Elements
                     borderBottomRightRadius = new Length(flowSize / 2, LengthUnit.Pixel),
                 }
             };
-            
+
             edgeControl.RegisterCallback<GeometryChangedEvent>(OnEdgeControlGeometryChanged);
         }
 

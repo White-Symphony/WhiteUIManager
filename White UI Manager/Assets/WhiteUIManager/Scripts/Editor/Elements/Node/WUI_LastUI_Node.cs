@@ -39,6 +39,7 @@ namespace WUI.Editor.Elements
             base.Initialize(nodeName, graphView, nodeType, position);
             
             PreviousNodes = new List<WUI_NodeData> { new() };
+            NextNodes = null;
             
             foreach (var previousNode in PreviousNodes)
             {
