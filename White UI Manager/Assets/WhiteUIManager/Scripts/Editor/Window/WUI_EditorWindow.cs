@@ -60,25 +60,15 @@ namespace WUI.Editor.Window
                 if (node == null) continue;
 
                 if(!node.IsStartingNode()) continue;
-                
-                var ports = node.outputContainer.Children().Select(e => e as WUI_Port).ToArray();
 
-                foreach (var port in ports)
-                {
-                    var edges = port.connections.Select(e => e as WUI_Edge);
-                    foreach (var edge in edges)
-                    {
-                        edge?.UpdateFlow();
-                    }
-                }
+                var nodeFlowToUpdate = new WUI_NodeData 
+                    {NodeName = node.UIName, NodeID = node.ID};
 
-                if (node.NextNodes == null) continue;
-
-                UpdateFlow(node.NextNodes, nodes);
+                UpdateFlow(nodes, nodeFlowToUpdate);
             }
         }
 
-        private void UpdateFlow(List<WUI_NodeData> nextNodes, WUI_Node[] nodes)
+        private void UpdateFlow(WUI_Node[] nodes, params WUI_NodeData[] nextNodes)
         {
             foreach (var nextNode in nextNodes)
             {
@@ -101,7 +91,7 @@ namespace WUI.Editor.Window
 
                 if (selectedNode.NextNodes == null) continue;
                 
-                UpdateFlow(selectedNode.NextNodes, nodes);
+                UpdateFlow(nodes, selectedNode.NextNodes.ToArray());
             }
         }
 
