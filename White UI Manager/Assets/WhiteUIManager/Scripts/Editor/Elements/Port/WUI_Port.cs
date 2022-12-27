@@ -94,7 +94,7 @@ namespace WUI.Editor.Elements
           
           var nodes = m_GraphView.nodes;
 
-          foreach (var nodeData in nodes.OfType<WUI_Node>().Where(nodeData => nodeData.NodeType != WUI_NodeType.HomeUI))
+          foreach (var nodeData in nodes.OfType<WUI_Node>().Where(nodeData => nodeData.NodeType != WUI_NodeType.LastUI))
           {
             if (nodeData == draggedPort.node) continue;
 
