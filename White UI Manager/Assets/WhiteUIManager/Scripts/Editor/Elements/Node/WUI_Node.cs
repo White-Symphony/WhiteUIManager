@@ -259,11 +259,11 @@ namespace WUI.Editor.Elements
         }
 
         public void AddInputWithData(string inputName, object ui_userData,
-            Port.Capacity capacity = Port.Capacity.Single)
+            Port.Capacity capacity = Port.Capacity.Single, WUI_NodeData nodeData = default)
         {
             if (PreviousNodes == null) return;
             
-            PreviousNodes.Add(new WUI_NodeData());
+            PreviousNodes.Add(nodeData);
             AddInput(inputName, ui_userData, capacity);
         }
 
@@ -286,11 +286,11 @@ namespace WUI.Editor.Elements
         }
 
         public void AddOutputWithData(string inputName, object ui_userData,
-            Port.Capacity capacity = Port.Capacity.Single)
+            Port.Capacity capacity = Port.Capacity.Single, WUI_NodeData nodeData = default)
         {
             if (NextNodes == null) return;
             
-            NextNodes.Add(new WUI_NodeData());
+            NextNodes.Add(nodeData);
             AddOutput(inputName, ui_userData, capacity);
         }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -95,6 +96,8 @@ namespace WUI.Editor.Graph
 
         public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
         {
+            if (startPort is WUI_Port port) port.OnSetupPorts(startPort);
+
             var compatiblePorts = new List<Port>();
 
             ports.ForEach(p =>
@@ -413,20 +416,26 @@ namespace WUI.Editor.Graph
                 {
                     foreach (var edge in changes.edgesToCreate)
                     {
-                        var previousNode = edge.output.node as WUI_Node;
-                        var nextNode = edge.input.node as WUI_Node;
-
-                        if (edge.input.userData is WUI_NodeData nextNodeData)
-                        {
-                            nextNodeData.NodeID = previousNode?.ID;
-                            nextNodeData.NodeName = previousNode?.UIName;
-                        }
-
-                        if ( edge.output.userData is WUI_NodeData previousNodeData)
-                        {
-                            previousNodeData.NodeID = nextNode?.ID;
-                            previousNodeData.NodeName = nextNode?.UIName;
-                        }
+                        //var inputPort = edge.input as WUI_Port;
+                        //var outputPort = edge.output as WUI_Port;
+                        //
+                        //inputPort.OnRemovePorts(inputPort);
+                        //outputPort.OnRemovePorts(outputPort);
+                        //
+                        //var previousNode = edge.output.node as WUI_Node;
+                        //var nextNode = edge.input.node as WUI_Node;
+                        //
+                        //if (edge.input.userData is WUI_NodeData nextNodeData)
+                        //{
+                        //    nextNodeData.NodeID = previousNode?.ID;
+                        //    nextNodeData.NodeName = previousNode?.UIName;
+                        //}
+                        //
+                        //if ( edge.output.userData is WUI_NodeData previousNodeData)
+                        //{
+                        //    previousNodeData.NodeID = nextNode?.ID;
+                        //    previousNodeData.NodeName = nextNode?.UIName;
+                        //}
 
                         var whiteEdge = edge as WUI_Edge;
 

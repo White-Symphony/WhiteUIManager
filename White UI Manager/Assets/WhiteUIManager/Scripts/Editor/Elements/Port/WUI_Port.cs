@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -16,38 +17,39 @@ namespace WUI.Editor.Elements
             
         }
 
-        public override void OnStartEdgeDragging()
+        public void OnSetupPorts(Port draggedPort)
         {
-          var draggedPort = edgeConnector.edgeDragHelper.draggedPort;
-          
           if(draggedPort != this) return;
 
           switch (draggedPort.direction)
           {
-            case Direction.Input: AddOutputs(draggedPort); break;
-            case Direction.Output: AddInputs(draggedPort); break;
+            case Direction.Input:  AddOutputs(draggedPort); break;
+            case Direction.Output: AddInputs(draggedPort);  break;
+            default: return;
+          }
+        }
+
+        public async void OnRemovePorts(Port draggedPort)
+        {
+          if(draggedPort != this) return;
+
+          await Task.Delay(100);
+
+          switch (draggedPort.direction)
+          {
+            case Direction.Input:  RemoveOutputs(); break;
+            case Direction.Output: RemoveInputs();  break;
             default: return;
           }
 
-          base.OnStartEdgeDragging();
+          edgeConnector.edgeDragHelper.draggedPort = null;
         }
-        
+
         public override void OnStopEdgeDragging()
         {
-          var draggedPort = edgeConnector.edgeDragHelper.draggedPort;
-          
-          if(draggedPort != this) return;
-
-          switch (draggedPort.direction)
-          {
-            case Direction.Input: RemoveOutputs(); break;
-            case Direction.Output: RemoveInputs(); break;
-            default: return;
-          }
+          OnRemovePorts(edgeConnector.edgeDragHelper.draggedPort);
 
           base.OnStopEdgeDragging();
-          
-          edgeConnector.edgeDragHelper.draggedPort = null;
         }
 
         public new WUI_Edge ConnectTo(Port other) => ConnectTo<WUI_Edge>(other);
@@ -77,6 +79,10 @@ namespace WUI.Editor.Elements
           {
             if (nodeData == draggedPort.node) continue;
 
+            if (draggedPort.node is not WUI_Node thisNode) continue;
+
+            if (nodeData.PreviousNodes.Any(n => n.NodeID == thisNode.ID)) continue;
+
             var inputPorts = nodeData.inputContainer.Children().Select(e => e as Port).ToArray();
             
             if (nodeData.inputContainer.childCount == 1)
@@ -84,7 +90,7 @@ namespace WUI.Editor.Elements
               if (inputPorts[^1].connected == false) continue;
             }
             
-            nodeData.AddInputWithData("", new WUI_NodeData());
+            nodeData.AddInputWithData("", nodeData);
           }
         }
 
@@ -98,6 +104,10 @@ namespace WUI.Editor.Elements
           {
             if (nodeData == draggedPort.node) continue;
 
+            if (draggedPort.node is not WUI_Node thisNode) continue;
+
+            if (nodeData.NextNodes.Any(n => n.NodeID == thisNode.ID)) continue;
+            
             var outputPorts = nodeData.outputContainer.Children().Select(e => e as Port).ToArray();
             
             if (nodeData.outputContainer.childCount == 1)
@@ -105,7 +115,7 @@ namespace WUI.Editor.Elements
               if (outputPorts[^1].connected == false) continue;
             }
             
-            nodeData.AddOutputWithData("", new WUI_NodeData());
+            nodeData.AddOutputWithData("", nodeData);
           }
         }
 
@@ -168,21 +178,21 @@ namespace WUI.Editor.Elements
             m_GraphViewChange.edgesToCreate = m_EdgesToCreate;
           }
 
-          public void OnDropOutsidePort(Edge edge, Vector2 position)
-          {
-          }
+          public void OnDropOutsidePort(Edge edge, Vector2 position){}
 
           public void OnDrop(GraphView graphView, Edge edge)
           {
             m_EdgesToCreate.Clear();
+            
             m_EdgesToCreate.Add(edge);
+            
             m_EdgesToDelete.Clear();
+            
             if (edge.input.capacity == Capacity.Single)
             {
               foreach (var connection in edge.input.connections)
               {
-                if (connection != edge)
-                  m_EdgesToDelete.Add(connection);
+                if (connection != edge) m_EdgesToDelete.Add(connection);
               }
             }
 
@@ -190,16 +200,17 @@ namespace WUI.Editor.Elements
             {
               foreach (var connection in edge.output.connections)
               {
-                if (connection != edge)
-                  m_EdgesToDelete.Add(connection);
+                if (connection != edge) m_EdgesToDelete.Add(connection);
               }
             }
 
-            if (m_EdgesToDelete.Count > 0)
-              graphView.DeleteElements(m_EdgesToDelete);
+            if (m_EdgesToDelete.Count > 0) graphView.DeleteElements(m_EdgesToDelete);
+            
             var edgesToCreate = m_EdgesToCreate;
+            
             if (graphView.graphViewChanged != null)
               edgesToCreate = graphView.graphViewChanged(m_GraphViewChange).edgesToCreate;
+            
             foreach (var edge1 in edgesToCreate)
             {
               graphView.AddElement(edge1);
