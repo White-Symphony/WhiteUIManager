@@ -256,15 +256,15 @@ namespace WUI.Editor.Elements
             inputContainer.Add(port);
 
             RefreshExpandedState();
+            RefreshPorts();
         }
 
-        public void AddInputWithData(string inputName, object ui_userData,
-            Port.Capacity capacity = Port.Capacity.Single, WUI_NodeData nodeData = default)
+        public void AddInputWithData(string inputName, Port.Capacity capacity = Port.Capacity.Single)
         {
             if (PreviousNodes == null) return;
             
-            PreviousNodes.Add(nodeData);
-            AddInput(inputName, ui_userData, capacity);
+            PreviousNodes.Add(new WUI_NodeData());
+            AddInput(inputName, new WUI_NodeData(), capacity);
         }
 
         public void AddOutput(string inputName, object ui_userData, Port.Capacity capacity = Port.Capacity.Single)
@@ -283,15 +283,15 @@ namespace WUI.Editor.Elements
             outputContainer.Add(port);
 
             RefreshExpandedState();
+            RefreshPorts();
         }
 
-        public void AddOutputWithData(string inputName, object ui_userData,
-            Port.Capacity capacity = Port.Capacity.Single, WUI_NodeData nodeData = default)
+        public void AddOutputWithData(string inputName, Port.Capacity capacity = Port.Capacity.Single)
         {
             if (NextNodes == null) return;
             
-            NextNodes.Add(nodeData);
-            AddOutput(inputName, ui_userData, capacity);
+            NextNodes.Add(new WUI_NodeData());
+            AddOutput(inputName, new WUI_NodeData(), capacity);
         }
 
         public bool RemoveLastInput()
@@ -304,6 +304,7 @@ namespace WUI.Editor.Elements
             inputContainer.Remove(port);
             
             RefreshExpandedState();
+            RefreshPorts();
 
             return true;
         }
@@ -318,6 +319,7 @@ namespace WUI.Editor.Elements
             outputContainer.Remove(port);
             
             RefreshExpandedState();
+            RefreshPorts();
 
             return true;
         }

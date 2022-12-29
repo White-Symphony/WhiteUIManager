@@ -158,8 +158,6 @@ MonoBehaviour:
   <NextNodes>k__BackingField:
   - <NodeName>k__BackingField: a
     <NodeID>k__BackingField: 90bff2eb-f3a6-4608-a112-5b1fdd59f809
-  - <NodeName>k__BackingField: 
-    <NodeID>k__BackingField: 
   <NodeType>k__BackingField: 1
 --- !u!114 &-841543437359754780
 MonoBehaviour:
@@ -185,8 +183,8 @@ MonoBehaviour:
     <NodeID>k__BackingField: c71df1f9-78b3-41d3-921f-ac953fc78e99
   - <NodeName>k__BackingField: asd
     <NodeID>k__BackingField: 1c389094-a135-4607-9ad2-96a6ae95b039
-  - <NodeName>k__BackingField: deli
-    <NodeID>k__BackingField: 7ca10ecb-2fa6-48f2-a52d-d1d4a213a485
+  - <NodeName>k__BackingField: 
+    <NodeID>k__BackingField: 
   <NodeType>k__BackingField: 1
 --- !u!114 &-362103857139090124
 MonoBehaviour:

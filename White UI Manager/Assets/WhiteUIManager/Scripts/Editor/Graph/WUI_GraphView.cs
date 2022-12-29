@@ -416,26 +416,30 @@ namespace WUI.Editor.Graph
                 {
                     foreach (var edge in changes.edgesToCreate)
                     {
-                        //var inputPort = edge.input as WUI_Port;
-                        //var outputPort = edge.output as WUI_Port;
-                        //
-                        //inputPort.OnRemovePorts(inputPort);
-                        //outputPort.OnRemovePorts(outputPort);
-                        //
-                        //var previousNode = edge.output.node as WUI_Node;
-                        //var nextNode = edge.input.node as WUI_Node;
-                        //
-                        //if (edge.input.userData is WUI_NodeData nextNodeData)
-                        //{
-                        //    nextNodeData.NodeID = previousNode?.ID;
-                        //    nextNodeData.NodeName = previousNode?.UIName;
-                        //}
-                        //
-                        //if ( edge.output.userData is WUI_NodeData previousNodeData)
-                        //{
-                        //    previousNodeData.NodeID = nextNode?.ID;
-                        //    previousNodeData.NodeName = nextNode?.UIName;
-                        //}
+                        var inputPort = edge.input as WUI_Port;
+                        var outputPort = edge.output as WUI_Port;
+
+                        inputPort.OnRemovePorts(inputPort);
+                        outputPort.OnRemovePorts(outputPort);
+
+                        var previousNode = edge.output.node as WUI_Node;
+                        var nextNode = edge.input.node as WUI_Node;
+
+                        if (edge.input.userData is WUI_NodeData nextNodeData)
+                        {
+                            Debug.Log($"input: {previousNode.UIName}");
+
+                            nextNodeData.NodeID = previousNode.ID;
+                            nextNodeData.NodeName = previousNode.UIName;
+                        }
+
+                        if (edge.output.userData is WUI_NodeData previousNodeData)
+                        {
+                            Debug.Log($"output: {nextNode.UIName}");
+                            
+                            previousNodeData.NodeID = nextNode.ID;
+                            previousNodeData.NodeName = nextNode.UIName;
+                        }
 
                         var whiteEdge = edge as WUI_Edge;
 

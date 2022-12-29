@@ -20,6 +20,8 @@ namespace WUI.Editor.Elements
         public void OnSetupPorts(Port draggedPort)
         {
           if(draggedPort != this) return;
+          
+          OnRemovePorts(draggedPort, false, 0);
 
           switch (draggedPort.direction)
           {
@@ -27,13 +29,15 @@ namespace WUI.Editor.Elements
             case Direction.Output: AddInputs(draggedPort);  break;
             default: return;
           }
+          
+          Debug.Log($"ports amount: {m_GraphView.ports.Count()}");
         }
 
-        public async void OnRemovePorts(Port draggedPort)
+        public async void OnRemovePorts(Port draggedPort, bool isRemoveDraggedPort = true, int delayTime = 100)
         {
           if(draggedPort != this) return;
-
-          await Task.Delay(100);
+          
+          await Task.Delay(delayTime);
 
           switch (draggedPort.direction)
           {
@@ -42,7 +46,7 @@ namespace WUI.Editor.Elements
             default: return;
           }
 
-          edgeConnector.edgeDragHelper.draggedPort = null;
+          if(isRemoveDraggedPort) edgeConnector.edgeDragHelper.draggedPort = null;
         }
 
         public override void OnStopEdgeDragging()
@@ -87,10 +91,10 @@ namespace WUI.Editor.Elements
             
             if (nodeData.inputContainer.childCount == 1)
             {
-              if (inputPorts[^1].connected == false) continue;
+              if (inputPorts.Any(port => !port.connected)) continue;
             }
-            
-            nodeData.AddInputWithData("", nodeData);
+
+            nodeData.AddInputWithData("");
           }
         }
 
@@ -112,10 +116,10 @@ namespace WUI.Editor.Elements
             
             if (nodeData.outputContainer.childCount == 1)
             {
-              if (outputPorts[^1].connected == false) continue;
+              if (outputPorts.Any(port => !port.connected)) continue;
             }
             
-            nodeData.AddOutputWithData("", nodeData);
+            nodeData.AddOutputWithData("");
           }
         }
 
