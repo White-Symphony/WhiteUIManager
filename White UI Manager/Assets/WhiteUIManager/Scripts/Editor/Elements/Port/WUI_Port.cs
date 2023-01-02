@@ -139,19 +139,19 @@ namespace WUI.Editor.Elements
           
           var nodes = m_GraphView.nodes.Select(n => n as WUI_Node);
 
-          foreach (var n in nodes)
+          foreach (var wuiNode in nodes)
           {
-            var inputPorts = n?.inputContainer.Children().Select(e => e as Port).ToArray();
+            var inputPorts = wuiNode?.inputContainer.Children().Select(e => e as Port).ToArray();
 
             if (inputPorts == null) continue;
 
             if (inputPorts.Length < 2) continue;
+
+            var emptyPorts = inputPorts.Where(p => !p.connected).ToArray();
             
-            for (var i = 1; i < inputPorts.Length; i++)
+            foreach (var emptyPort in emptyPorts)
             {
-              if (inputPorts[i].connected) continue;
-              
-              n.RemoveLastInput();
+              wuiNode.RemoveInput(emptyPort);
             }
           }
         }
@@ -162,19 +162,19 @@ namespace WUI.Editor.Elements
 
           var nodes = m_GraphView.nodes.Select(n => n as WUI_Node);
 
-          foreach (var n in nodes)
+          foreach (var wuiNode in nodes)
           {
-            var outputPorts = n?.outputContainer.Children().Select(e => e as Port).ToArray();
+            var outputPorts = wuiNode?.outputContainer.Children().Select(e => e as Port).ToArray();
 
             if (outputPorts == null) continue;
 
             if (outputPorts.Length < 2) continue;
-            
-            for (var i = 1; i < outputPorts.Length; i++)
-            {
-              if (outputPorts[i].connected) continue;
 
-              n.RemoveLastOutput();
+            var emptyPorts = outputPorts.Where(p => !p.connected).ToArray();
+
+            foreach (var emptyPort in emptyPorts)
+            {
+              wuiNode.RemoveOutput(emptyPort);
             }
           }
         }

@@ -12,9 +12,6 @@ namespace WUI.Editor.Elements
         public string ID { get; set; }
         
         public string OldTitle { get; set; }
-        
-        private readonly Color _defaultBorderColor;
-        private readonly float _defaultBorderWidth;
 
         public WUI_Group(string id, string title, Vector2 position)
         {
@@ -27,9 +24,6 @@ namespace WUI.Editor.Elements
             OldTitle = title;
             
             SetPosition(new Rect(position, Vector2.zero));
-            
-            _defaultBorderColor = contentContainer.style.borderTopColor.value;
-            _defaultBorderWidth = contentContainer.style.borderTopWidth.value;
 
             headerContainer.AddClasses("wui-group__header-container");
         }
@@ -37,13 +31,11 @@ namespace WUI.Editor.Elements
         public void SetErrorStyle(Color color)
         {
             contentContainer.style.borderBottomColor = color;
-            contentContainer.style.borderBottomWidth = 2f;
         }
 
         public void ResetStyle()
         {
-            contentContainer.style.borderBottomColor = _defaultBorderColor;
-            contentContainer.style.borderBottomWidth = _defaultBorderWidth;
+            contentContainer.style.borderBottomColor = new Color(0.2f, 0.2f, 0.2f);
         }
     }
 }

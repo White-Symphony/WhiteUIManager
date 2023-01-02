@@ -294,34 +294,30 @@ namespace WUI.Editor.Elements
             AddOutput(inputName, nodeData, capacity);
         }
 
-        public bool RemoveLastInput()
+        public void RemoveInput(Port port)
         {
-            if (inputContainer.Children().Last() is not Port port) return false;
+            if (port.connected) return;
 
-            if (port.connected) return false;
+            var index = inputContainer.Children().ToList().IndexOf(port);
 
-            PreviousNodes.Remove(PreviousNodes[^1]);
+            PreviousNodes.Remove(PreviousNodes[index]);
             inputContainer.Remove(port);
             
             RefreshExpandedState();
             RefreshPorts();
-
-            return true;
         }
 
-        public bool RemoveLastOutput()
+        public void RemoveOutput(Port port)
         {
-            if (outputContainer.Children().Last() is not Port port) return false;
+            if (port.connected) return;
             
-            if (port.connected) return false;
+            var index = outputContainer.Children().ToList().IndexOf(port);
 
-            NextNodes.Remove(NextNodes[^1]);
+            NextNodes.Remove(NextNodes[index]);
             outputContainer.Remove(port);
             
             RefreshExpandedState();
             RefreshPorts();
-
-            return true;
         }
 
         #endregion

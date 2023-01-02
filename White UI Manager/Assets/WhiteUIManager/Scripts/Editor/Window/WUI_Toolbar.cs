@@ -27,9 +27,8 @@ namespace WUI.Editor.Window
         public WUI_Toolbar(WUI_GraphView graphView)
         {
             _graphView = graphView;
-            
-            _toolbar = new Toolbar();
 
+            _toolbar = new Toolbar();
             var clearButton = WUI_ElementUtility.CreateButton("Clear", Clear);
             _miniMapButton = WUI_ElementUtility.CreateButton("Mini Map", ToggleMiniMap);
             

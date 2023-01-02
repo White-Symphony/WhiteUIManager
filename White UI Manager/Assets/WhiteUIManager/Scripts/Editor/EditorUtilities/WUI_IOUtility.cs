@@ -64,8 +64,8 @@ namespace WUI.Editor.Utilities
 
             groupData.Initialize(group.ID, group.title, group.GetPosition().position);
             
-            SaveAsset(groupData);
-            SaveAsset(graphData);
+            DirtyAsset(groupData);
+            DirtyAsset(graphData);
         }
         
         public static void AddNode(WUI_Node node, Vector2 position)
@@ -135,17 +135,7 @@ namespace WUI.Editor.Utilities
             
             var graphData = GetGraphData();
 
-            if (graphData == null) return;
-            
-            graphData.Initialize(graphData.FileName);
-
-            WUI_Toolbar.UpdateFileName(graphData.FileName);
-
-            LoadGroups(graphData.Groups);
-            LoadNodes(graphData.Nodes);
-            LoadNodesConnections();
-
-            WUI_EditorWindow.GetGraphView().SetViewPositionToObjectCenter(Vector3.zero);
+            Load(graphData);
         }
 
         #endregion
@@ -161,8 +151,9 @@ namespace WUI.Editor.Utilities
             if (!graphData.RemoveGroup(groupID)) return;
             
             AssetDatabase.RemoveObjectFromAsset(groupData);
-            SaveAsset(groupData);
-            SaveAsset(graphData);
+            
+            DirtyAsset(groupData);
+            DirtyAsset(graphData);
         }
         
         public static void RemoveNodeByID(string nodeID)
@@ -194,7 +185,7 @@ namespace WUI.Editor.Utilities
         
         #region Groups
 
-        private static void LoadGroups(List<WUI_Group_SO> groups)
+        private static void LoadGroups(IReadOnlyCollection<WUI_Group_SO> groups)
         {
             if (groups.Count < 1) return;
 

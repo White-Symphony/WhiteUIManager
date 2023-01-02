@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: bfff9d52-120e-4f6a-827d-8107f3f50970
   <GroupID>k__BackingField: 3250f79f-7dcf-4185-9294-ba6787f8ce75
-  <Position>k__BackingField: {x: 830, y: 352}
+  <Position>k__BackingField: {x: 630, y: 348}
   <NodeName>k__BackingField: Rims
   <PreviousNodes>k__BackingField:
   - <NodeName>k__BackingField: customize
@@ -35,7 +35,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 2781b350-0ec7-41ff-b919-d49448972c5b
   <GroupID>k__BackingField: 3250f79f-7dcf-4185-9294-ba6787f8ce75
-  <Position>k__BackingField: {x: 375, y: 381}
+  <Position>k__BackingField: {x: 341, y: 309}
   <NodeName>k__BackingField: customize
   <PreviousNodes>k__BackingField:
   - <NodeName>k__BackingField: Menu
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 20a784ce-c92b-4918-87aa-30c9625376a3
   <GroupID>k__BackingField: 3250f79f-7dcf-4185-9294-ba6787f8ce75
-  <Position>k__BackingField: {x: 643, y: 311}
+  <Position>k__BackingField: {x: 629, y: 237}
   <NodeName>k__BackingField: Colours
   <PreviousNodes>k__BackingField:
   - <NodeName>k__BackingField: customize
@@ -85,7 +85,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: fbaabe59-a3c0-4880-908e-da4d8634afb2
   <GroupID>k__BackingField: 
-  <Position>k__BackingField: {x: 350, y: -23}
+  <Position>k__BackingField: {x: 315, y: 21}
   <NodeName>k__BackingField: Play
   <PreviousNodes>k__BackingField:
   - <NodeName>k__BackingField: Menu
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 083c4748-98f1-47bb-b0d5-220c902a78d8
   <GroupID>k__BackingField: 830ee168-bc9b-41fc-aeb4-637a8113be08
-  <Position>k__BackingField: {x: 821, y: -179}
+  <Position>k__BackingField: {x: 687, y: -122}
   <NodeName>k__BackingField: SoundSettings
   <PreviousNodes>k__BackingField:
   - <NodeName>k__BackingField: settings
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 06c29ddb-eee2-467c-8399-51f21c52f028
   <GroupID>k__BackingField: 830ee168-bc9b-41fc-aeb4-637a8113be08
-  <Position>k__BackingField: {x: 601, y: -284}
+  <Position>k__BackingField: {x: 498, y: -165}
   <NodeName>k__BackingField: VisualSettings
   <PreviousNodes>k__BackingField:
   - <NodeName>k__BackingField: settings
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 830ee168-bc9b-41fc-aeb4-637a8113be08
   <Name>k__BackingField: Settings
-  <Position>k__BackingField: {x: 349.00003, y: -343}
+  <Position>k__BackingField: {x: 314.1435, y: -224.29681}
 --- !u!114 &4807657043058979657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -218,7 +218,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 2c8a89b0-3545-4278-ac14-2abd4403037b
   <GroupID>k__BackingField: 
-  <Position>k__BackingField: {x: 350, y: 128}
+  <Position>k__BackingField: {x: 468, y: 50}
   <NodeName>k__BackingField: Upgrade
   <PreviousNodes>k__BackingField:
   - <NodeName>k__BackingField: Menu
@@ -239,7 +239,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: b2d9c9e2-6660-4829-8bf2-20e19f1cacc7
   <GroupID>k__BackingField: 3250f79f-7dcf-4185-9294-ba6787f8ce75
-  <Position>k__BackingField: {x: 643, y: 579}
+  <Position>k__BackingField: {x: 630, y: 570}
   <NodeName>k__BackingField: BodyParst
   <PreviousNodes>k__BackingField:
   - <NodeName>k__BackingField: customize
@@ -260,7 +260,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: f29ca412-e31e-443e-9b33-8be61c353875
   <GroupID>k__BackingField: 3250f79f-7dcf-4185-9294-ba6787f8ce75
-  <Position>k__BackingField: {x: 829, y: 468}
+  <Position>k__BackingField: {x: 630, y: 459}
   <NodeName>k__BackingField: LicancePlate
   <PreviousNodes>k__BackingField:
   - <NodeName>k__BackingField: customize
@@ -281,7 +281,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: fb3d4c51-dd4d-4d15-9464-73e4d83e9a9e
   <GroupID>k__BackingField: 830ee168-bc9b-41fc-aeb4-637a8113be08
-  <Position>k__BackingField: {x: 374, y: -203}
+  <Position>k__BackingField: {x: 339, y: -146}
   <NodeName>k__BackingField: settings
   <PreviousNodes>k__BackingField:
   - <NodeName>k__BackingField: Menu
@@ -306,4 +306,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <ID>k__BackingField: 3250f79f-7dcf-4185-9294-ba6787f8ce75
   <Name>k__BackingField: Customization
-  <Position>k__BackingField: {x: 350.00003, y: 251.99994}
+  <Position>k__BackingField: {x: 316.00003, y: 178}
