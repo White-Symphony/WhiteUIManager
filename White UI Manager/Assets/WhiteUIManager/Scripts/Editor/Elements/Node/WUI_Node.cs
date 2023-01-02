@@ -259,12 +259,12 @@ namespace WUI.Editor.Elements
             RefreshPorts();
         }
 
-        public void AddInputWithData(string inputName, Port.Capacity capacity = Port.Capacity.Single)
+        public void AddInputWithData(string inputName, Port.Capacity capacity = Port.Capacity.Single, WUI_NodeData nodeData = null)
         {
             if (PreviousNodes == null) return;
             
-            PreviousNodes.Add(new WUI_NodeData());
-            AddInput(inputName, new WUI_NodeData(), capacity);
+            PreviousNodes.Add(nodeData);
+            AddInput(inputName, nodeData, capacity);
         }
 
         public void AddOutput(string inputName, object ui_userData, Port.Capacity capacity = Port.Capacity.Single)
@@ -286,12 +286,12 @@ namespace WUI.Editor.Elements
             RefreshPorts();
         }
 
-        public void AddOutputWithData(string inputName, Port.Capacity capacity = Port.Capacity.Single)
+        public void AddOutputWithData(string inputName, Port.Capacity capacity = Port.Capacity.Single, WUI_NodeData nodeData = null)
         {
             if (NextNodes == null) return;
             
-            NextNodes.Add(new WUI_NodeData());
-            AddOutput(inputName, new WUI_NodeData(), capacity);
+            NextNodes.Add(nodeData);
+            AddOutput(inputName, nodeData, capacity);
         }
 
         public bool RemoveLastInput()

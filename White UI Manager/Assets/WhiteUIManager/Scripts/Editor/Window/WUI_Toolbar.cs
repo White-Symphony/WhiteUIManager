@@ -53,6 +53,9 @@ namespace WUI.Editor.Window
 
             WUI_IOUtility.Initialize(_graphView);
             WUI_IOUtility.Load(instanceID);
+            
+            _graphView.RemoveNoGraphsText();
+            _graphView.AddGridBackground();
         }
 
         private static void Clear()

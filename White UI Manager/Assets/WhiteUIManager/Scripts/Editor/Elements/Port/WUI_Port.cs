@@ -29,8 +29,6 @@ namespace WUI.Editor.Elements
             case Direction.Output: AddInputs(draggedPort);  break;
             default: return;
           }
-          
-          Debug.Log($"ports amount: {m_GraphView.ports.Count()}");
         }
 
         public async void OnRemovePorts(Port draggedPort, bool isRemoveDraggedPort = true, int delayTime = 100)
@@ -94,7 +92,13 @@ namespace WUI.Editor.Elements
               if (inputPorts.Any(port => !port.connected)) continue;
             }
 
-            nodeData.AddInputWithData("");
+            var inputData = new WUI_NodeData()
+            {
+              NodeName = thisNode.UIName,
+              NodeID = thisNode.ID
+            };
+            
+            nodeData.AddInputWithData("", Capacity.Single, inputData);
           }
         }
 
@@ -118,8 +122,14 @@ namespace WUI.Editor.Elements
             {
               if (outputPorts.Any(port => !port.connected)) continue;
             }
+
+            var outputData = new WUI_NodeData()
+            {
+              NodeName = thisNode.UIName,
+              NodeID = thisNode.ID
+            };
             
-            nodeData.AddOutputWithData("");
+            nodeData.AddOutputWithData("", Capacity.Single, outputData);
           }
         }
 

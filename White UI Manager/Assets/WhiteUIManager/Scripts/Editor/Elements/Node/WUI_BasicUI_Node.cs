@@ -18,7 +18,6 @@ namespace WUI.Editor.Elements
             
             base.Draw();
             
-            AddUIInfo();
             AddOpenButton();
         }
 

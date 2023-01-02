@@ -13,7 +13,7 @@ namespace WUI.Editor.Manipulator
         {
             _manipulators = new List<IManipulator>
             {
-                new ContentZoomer(),
+                new ContentZoomer{minScale = .5f,maxScale = 3f},
                 new ContentDragger(),
                 new SelectionDragger(),
                 new RectangleSelector(),

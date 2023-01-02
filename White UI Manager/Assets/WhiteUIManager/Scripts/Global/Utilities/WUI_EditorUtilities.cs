@@ -67,7 +67,7 @@ namespace WUI.Utilities
         {
             Begin_V(Styles.HelpBox);
             
-            EditorGUILayout.LabelField(field, Styles.LabelStyle);
+           EditorGUILayout.LabelField(field, Styles.LabelStyle);
             
             EditorGUILayout.Space(10);
 

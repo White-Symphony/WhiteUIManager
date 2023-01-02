@@ -17,8 +17,7 @@ namespace WUI.Editor.Elements
             NodeType = WUI_NodeType.LastUI;
             
             base.Draw();
-
-            AddUIInfo();
+            
             AddOpenButton();
         }
 

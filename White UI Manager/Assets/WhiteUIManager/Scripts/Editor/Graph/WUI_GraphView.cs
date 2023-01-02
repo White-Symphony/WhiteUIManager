@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -33,6 +32,8 @@ namespace WUI.Editor.Graph
         private readonly WUI_Graph_Feature _miniMap;
         private readonly WUI_Graph_Feature _gridBackground;
 
+        private Label _noGraphsText;
+        
         public int NamesErrorAmount { get; set; }
 
         public WUI_GraphView(WUI_EditorWindow editorWindow)
@@ -68,7 +69,7 @@ namespace WUI.Editor.Graph
 
             AddManipulators();
             
-            AddGridBackground();
+            AddNoGraphsText();
 
             AddSearchWindow();
 
@@ -89,6 +90,9 @@ namespace WUI.Editor.Graph
 
         public void LoadData(string filePath, string instanceID)
         {
+            RemoveNoGraphsText();
+            AddGridBackground();
+            
             _editorWindow.GetToolbar().LoadToInputPath(filePath, instanceID);
         }
 
@@ -339,8 +343,7 @@ namespace WUI.Editor.Graph
                 var groupData = WUI_IOUtility.GetGroupByID(wui_group.ID);
 
                 groupData.Name = wui_group.title;
-                groupData.name = wui_group.title;
-                
+
                 WUI_IOUtility.DirtyAsset(groupData);
                 
                 if (string.IsNullOrEmpty(wui_group.title))
@@ -427,16 +430,12 @@ namespace WUI.Editor.Graph
 
                         if (edge.input.userData is WUI_NodeData nextNodeData)
                         {
-                            Debug.Log($"input: {previousNode.UIName}");
-
                             nextNodeData.NodeID = previousNode.ID;
                             nextNodeData.NodeName = previousNode.UIName;
                         }
 
                         if (edge.output.userData is WUI_NodeData previousNodeData)
                         {
-                            Debug.Log($"output: {nextNode.UIName}");
-                            
                             previousNodeData.NodeID = nextNode.ID;
                             previousNodeData.NodeName = nextNode.UIName;
                         }
@@ -664,6 +663,26 @@ namespace WUI.Editor.Graph
 
         #region Elements Addition
 
+        public void AddNoGraphsText()
+        {
+            _noGraphsText = new Label
+            {
+                text = "No Graphs",
+                style =
+                {
+                    fontSize = 100,
+                    paddingLeft = viewport.transform.position.x / 2,
+                    paddingTop = viewport.transform.position.y / 2,
+                    backgroundColor = new Color(0.12f, 0.12f, 0.12f),
+                    unityTextAlign = TextAnchor.MiddleCenter
+                }
+            };
+            
+            _noGraphsText.StretchToParentSize();
+            
+            Insert(0, _noGraphsText);
+        }
+        
         private void AddSearchWindow()
         {
             _searchWindow = ScriptableObject.CreateInstance<WUI_SearchWindow>();
@@ -682,8 +701,8 @@ namespace WUI.Editor.Graph
 
             _miniMap.AddToElement(this);
         }
-        
-        private void AddGridBackground()
+
+        public void AddGridBackground()
         {
             if (_gridBackground is not WUI_GridBackground background) return;
                 
@@ -717,6 +736,26 @@ namespace WUI.Editor.Graph
 
         #endregion
 
+        #region Elements Remove
+
+        public void RemoveNoGraphsText()
+        {
+            if (_noGraphsText.parent != this) return;
+            
+            Remove(_noGraphsText);
+        }
+        
+        public void RemoveGridBackground()
+        {
+            if (_gridBackground is not WUI_GridBackground background) return;
+
+            if (background.GetBackground().parent != this) return;
+            
+            Remove(background.GetBackground());
+        }
+
+        #endregion
+        
         #region Utilities
 
         public Vector2 GetLocalMousePosition(Vector2 mousePosition, bool isSearchWindow = false)
@@ -749,6 +788,9 @@ namespace WUI.Editor.Graph
             _ungroupedNodes.Clear();
 
             NamesErrorAmount = 0;
+            
+            RemoveGridBackground();
+            AddNoGraphsText();
         }
 
         #endregion

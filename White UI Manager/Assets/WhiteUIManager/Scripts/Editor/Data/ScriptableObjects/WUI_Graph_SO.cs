@@ -1,16 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.Callbacks;
 using UnityEditor.Compilation;
 using UnityEngine;
-using WUI.Editor.Enumerations;
 using WUI.Editor.Utilities;
 using WUI.Editor.Window;
 using WUI.Runtime.ScriptableObjects;
 using WUI.Utilities;
-using Vector2 = UnityEngine.Vector2;
 
 namespace WUI.Editor.Data.ScriptableObjects
 {
@@ -22,17 +21,9 @@ namespace WUI.Editor.Data.ScriptableObjects
         [field:SerializeField] public List<WUI_Group_SO> Groups { get; set; }
         
         [field:SerializeField] public List<WUI_Node_SO> Nodes { get; set; }
-        
-        [field:SerializeField] public List<string> OldGroupNames { get; set; }
-        
-        [field:SerializeField] public List<string> oldUngroupedNodeNames { get;set; }
-        
-        [field:SerializeField] public WUI_SerializableDictionary<string, List<string>> OldGroupedNames { get; set; }
-
-        private static int myInstanceID;
 
         private WUI_Graph_SO savedGraph;
-        
+
         public bool RemoveGroup(string groupID)
         {
             var removingGroup = Groups.FirstOrDefault(g => g.ID == groupID);
@@ -64,10 +55,8 @@ namespace WUI.Editor.Data.ScriptableObjects
         }
 
         [OnOpenAsset]
-        public static bool OnOpenAsset(int instanceID, int line)
+        public static bool OnOpenAsset(int instanceID)
         {
-            myInstanceID = instanceID;
-            
             var project = EditorUtility.InstanceIDToObject(instanceID) as WUI_Graph_SO;
             if (project == null) return false;
 
@@ -76,13 +65,16 @@ namespace WUI.Editor.Data.ScriptableObjects
 
             return true;
         }
-        
-        private void Awake() 
-        {
-            EditorApplication.projectChanged += SetFileName;
-        }
 
-        private void OnDestroy()
+        private void LoadData(object _) => OnOpenAsset(GetInstanceID());
+
+        private void Awake() => EditorApplication.projectChanged += SetFileName;
+
+        private void OnEnable() => CompilationPipeline.compilationFinished += LoadData;
+
+        private void OnDisable() => CompilationPipeline.compilationFinished -= LoadData; 
+
+        public void DestroyHandler()
         {
             EditorApplication.projectChanged -= SetFileName;
 
