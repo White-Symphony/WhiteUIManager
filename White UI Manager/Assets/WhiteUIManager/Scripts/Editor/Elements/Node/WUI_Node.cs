@@ -4,16 +4,16 @@ using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using WUI.Editor.Data.Save;
-using WUI.Editor.Graph;
-using WUI.Editor.Manipulator;
 using WUI.Runtime.ScriptableObjects;
 using WUI.Utilities;
 
 namespace WUI.Editor.Elements
 {
     using Enumerations;
+    using Manipulator;
     using Utilities;
+    using Data.Save;
+    using Graph;
     
     public class WUI_Node : Node
     {
